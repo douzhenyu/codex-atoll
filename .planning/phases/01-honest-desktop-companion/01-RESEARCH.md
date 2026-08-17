@@ -333,17 +333,15 @@ This is a later-phase-only pattern; do not instantiate it for the unobservable D
 | A2 | A thin test-only `NSWorkspace` wrapper is sufficient to simulate launcher results without adding a generic integration abstraction. | Code Examples | Low — if AppKit cannot be isolated cleanly, use a protocol at that one boundary only. |
 | A3 | Source scanning for inherited terms is an adequate pre-build safety check alongside runtime smoke tests. | Common Pitfalls | Medium — it detects copied paths but cannot prove an external side effect was impossible. |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **What long-lived Codex Atoll bundle identifier and Team ID will public distribution use?**
    - What we know: the reference identifier is `com.engels74.ClaudeAtoll`, and its Info.plist includes its own Sparkle feed/key. [VERIFIED: /Users/dou/claude-atoll/ClaudeAtoll.xcodeproj/project.pbxproj:304-305; /Users/dou/claude-atoll/ClaudeAtoll/Info.plist:20-26]
-   - What's unclear: the new public identity has not been allocated. [ASSUMED]
-   - Recommendation: set a development-safe Codex Atoll identifier while bootstrapping, keep Sparkle disabled, and make Developer ID/Sparkle identity a Phase 6 decision gate. [VERIFIED: .planning/ROADMAP.md:15-20]
+   - Resolution: the public bundle identifier, Team ID, Developer ID signing, and Sparkle identity are Phase 6 decisions. Phase 1 uses development identifier `com.codexatoll.CodexAtoll`, keeps Sparkle absent, and does not treat the development value as the public identity. [VERIFIED: .planning/ROADMAP.md:96-102]
 
 2. **How should a renamed, side-by-side ChatGPT desktop bundle be detected after OpenAI changes its identifier?**
    - What we know: the current local app declares `"com.openai.codex"`, while Apple’s lookup API returns nil if no matching bundle identifier is registered. [VERIFIED: /Applications/ChatGPT.app/Contents/Info.plist:195-196] [CITED: https://developer.apple.com/documentation/appkit/nsworkspace/urlforapplication%28withbundleidentifier%3A%29]
-   - What's unclear: OpenAI has not published a task-level desktop handoff/compatibility identifier in the sources reviewed. [ASSUMED]
-   - Recommendation: centralize the identifier, add a manual compatibility probe, and show the required Applications fallback when it does not resolve. [VERIFIED: .planning/phases/01-honest-desktop-companion/01-UI-SPEC.md:146-151]
+   - Resolution: Phase 1 keeps an ordered compile-time bundle-identifier set containing only the verified `com.openai.codex`, asks Launch Services to activate the first registered match, and tests that exact set. If no identifier resolves, it keeps the Desktop card visible and shows the approved Applications fallback; it does not invent another identifier or unverified deep link. Compatibility probes may add an identifier only after it is verified against an official installed ChatGPT release. At no point may this detection read private ChatGPT/Codex Desktop state, infer a task, or automate the Desktop UI. [VERIFIED: .planning/phases/01-honest-desktop-companion/01-UI-SPEC.md:146-151]
 
 ## Environment Availability
 

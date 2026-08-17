@@ -38,14 +38,16 @@ created: 2026-08-17
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 01-01-01 | 01-01 | 1 | DESK-01 | T-01-01 | Renamed accessory app renders the static collapsed/open companion shell with neutral state and no inherited lifecycle side effects. | build + source scan | `xcodebuild build -project CodexAtoll.xcodeproj -target CodexAtoll -configuration Debug` plus the Plan 01 source scan | ❌ W0 | ⬜ pending |
-| 01-01-02 | 01-01 | 1 | DESK-01 | T-01-01, T-01-03 | XCTest proves local open/close route, collapsed identity/accessibility, and forbidden shell inventory. | unit | `xcodebuild test -project CodexAtoll.xcodeproj -scheme CodexAtoll -destination 'platform=macOS' -only-testing:CodexAtollTests/CapabilityContractTests` | ❌ W0 | ⬜ pending |
-| 01-02-01 | 01-02 | 2 | DESK-01, DESK-02, DESK-03 | T-02-01, T-02-04 | Complete Desktop card exposes one unobservable capability and uses only the fixed native ChatGPT activation route. | unit + manual accessibility | same full XCTest command | ❌ W0 | ⬜ pending |
-| 01-02-02 | 01-02 | 2 | DESK-02 | T-02-03, T-02-05 | ChatGPT lookup, launch, activation failure, success, coalescing, timeout, and retry map to explicit outcomes without UI automation. | unit + source scan | same full XCTest command plus the Plan 02 source scan | ❌ W0 | ⬜ pending |
-| 01-03-01 | 01-03 | 3 | USAGE-01 | T-03-01 | Usage action opens only `https://chatgpt.com/codex/settings/usage` and never fetches or fabricates quota data. | unit + source scan | same full XCTest command plus the Plan 03 source scan | ❌ W0 | ⬜ pending |
-| 01-03-02 | 01-03 | 3 | USAGE-01 | T-03-05 | Usage/menu controls preserve fixed targets, bounded feedback, retry, accessibility labels, and overflow reachability. | unit + manual accessibility | same full XCTest command | ❌ W0 | ⬜ pending |
-| 01-04-01 | 01-04 | 4 | PRIV-01, PRIV-05 | T-04-02 | Privacy view contains ordered prompt, tool/result, session metadata, processing location, retention, and credential/private-data exclusions. | unit | same full XCTest command | ❌ W0 | ⬜ pending |
-| 01-04-02 | 01-04 | 4 | DESK-01, DESK-02, DESK-03, USAGE-01, PRIV-01, PRIV-05 | T-04-01–05 | Phase boundary rejects inherited side effects, private data, automation, and mutable external targets. | unit + source scan + build | full XCTest/build command plus the Plan 04 source scan | ❌ W0 | ⬜ pending |
+| 01-01-01 | 01-01 | 1 | DESK-01 | T-01-01, T-01-02 | Apache attribution, Codex product identity, and local assets exist without inherited runtime services. | source scan | Plan 01 attribution/identity scan | ❌ W0 | ⬜ pending |
+| 01-01-02 | 01-01 | 1 | DESK-01 | T-01-03, T-01-04 | App/XCTest targets and shared scheme build with no external package or extra service target. | build | `xcodebuild build -project CodexAtoll.xcodeproj -scheme CodexAtoll -configuration Debug` | ❌ W0 | ⬜ pending |
+| 01-02-01 | 01-02 | 2 | DESK-01 | T-02-01, T-02-04 | Native accessory panel renders the static collapsed/open companion shell with neutral state and no inherited lifecycle side effect. | build + source scan | same build command plus the Plan 02 source scan | ❌ W0 | ⬜ pending |
+| 01-02-02 | 01-02 | 2 | DESK-01 | T-02-01, T-02-03 | XCTest proves local open/close route, zero-data behavior, collapsed identity/accessibility, and forbidden shell inventory. | unit | `xcodebuild test -project CodexAtoll.xcodeproj -scheme CodexAtoll -destination 'platform=macOS' -only-testing:CodexAtollTests/CapabilityContractTests` | ❌ W0 | ⬜ pending |
+| 01-03-01 | 01-03 | 3 | DESK-01, DESK-02, DESK-03 | T-03-01, T-03-04 | Complete Desktop card exposes one unobservable capability and uses only the verified ChatGPT identifier set. | unit + manual accessibility | same full XCTest command | ❌ W0 | ⬜ pending |
+| 01-03-02 | 01-03 | 3 | DESK-02 | T-03-03, T-03-05 | ChatGPT lookup, launch, activation failure, success, coalescing, timeout, and retry map to explicit outcomes without UI automation. | unit + source scan | same full XCTest command plus the Plan 03 source scan | ❌ W0 | ⬜ pending |
+| 01-04-01 | 01-04 | 4 | USAGE-01 | T-04-01 | Usage action opens only `https://chatgpt.com/codex/settings/usage` and never fetches or fabricates quota data. | unit + source scan | same full XCTest command plus the Plan 04 source scan | ❌ W0 | ⬜ pending |
+| 01-04-02 | 01-04 | 4 | USAGE-01 | T-04-05 | Usage/menu controls preserve fixed targets, bounded feedback, retry, accessibility labels, and overflow reachability. | unit + manual accessibility | same full XCTest command | ❌ W0 | ⬜ pending |
+| 01-05-01 | 01-05 | 5 | PRIV-01, PRIV-05 | T-05-02 | Privacy view contains ordered prompt, tool/result, session metadata, processing location, retention, and credential/private-data exclusions. | unit | same full XCTest command | ❌ W0 | ⬜ pending |
+| 01-05-02 | 01-05 | 5 | DESK-01, DESK-02, DESK-03, USAGE-01, PRIV-01, PRIV-05 | T-05-01–05 | Phase boundary rejects inherited side effects, private data, automation, and mutable external targets. | unit + source scan + build | full XCTest/build command plus the Plan 05 source scan | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -53,6 +55,7 @@ created: 2026-08-17
 
 ## Wave 0 Requirements
 
+- [ ] Plan 01 creates the `CodexAtollTests` target and shared scheme; Plan 02 creates `CapabilityContractTests.swift` for shell routes and grows it in later slices.
 - [ ] `CodexAtollTests/CapabilityContractTests.swift` — fixed Desktop, usage-unavailable, privacy copy, routes, and prohibited-control assertions.
 - [ ] `CodexAtollTests/DesktopHandoffLauncherTests.swift` — absent app, launch error, activation failure, and success outcome mapping.
 - [ ] `CodexAtollTests` XCTest target and a small injectable `WorkspaceOpening` boundary around `NSWorkspace`.

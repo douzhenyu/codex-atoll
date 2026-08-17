@@ -31,13 +31,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. User can open ChatGPT Desktop from that entry and is told clearly which actions must remain in ChatGPT until an official integration is available.
   3. User can open the official Codex usage or limits surface without Codex Atoll requesting or reading account credentials.
   4. Before enabling any integration, user can review the prompt, tool, result, and session metadata Codex Atoll may process.
-**Plans**: 4 plans
+**Plans**: 5 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Bootstrap the renamed Xcode/XCTest scaffold and static native notch shell.
-- [ ] 01-02-PLAN.md — Add the honest Desktop capability card and bounded ChatGPT activation.
-- [ ] 01-03-PLAN.md — Add the in-notch usage-unavailable route, official handoff, and accessible menu.
-- [ ] 01-04-PLAN.md — Add Privacy & Data disclosure and prove the full capability/privacy boundary.
+- [ ] 01-01-PLAN.md — Establish Apache attribution, Codex identity, app/XCTest targets, and the shared scheme.
+- [ ] 01-02-PLAN.md — Wire the native collapsed/open notch shell and neutral local companion route.
+- [ ] 01-03-PLAN.md — Add the honest Desktop capability card and bounded ChatGPT activation.
+- [ ] 01-04-PLAN.md — Add the in-notch usage-unavailable route, official handoff, and accessible menu.
+- [ ] 01-05-PLAN.md — Add Privacy & Data disclosure and prove the full capability/privacy boundary.
 **UI hint**: yes
 
 ### Phase 2: Trusted CLI Monitoring
@@ -110,7 +111,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Honest Desktop Companion | 0/4 | Not started | - |
+| 1. Honest Desktop Companion | 0/5 | Not started | - |
 | 2. Trusted CLI Monitoring | 0/TBD | Not started | - |
 | 3. Safe CLI Actions | 0/TBD | Not started | - |
 | 4. Atoll-Owned Sessions | 0/TBD | Not started | - |

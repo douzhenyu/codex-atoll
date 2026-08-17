@@ -27,6 +27,14 @@ A Codex user can open the native notch companion, see an explicitly unobservable
 - [ ] UI — native buttons invoke the tested `NSWorkspace` boundary for ChatGPT activation and the fixed official usage URL.
 - [ ] Runtime — after full Xcode is installed and selected: `xcodebuild test -project CodexAtoll.xcodeproj -scheme CodexAtoll -destination 'platform=macOS' && xcodebuild build -project CodexAtoll.xcodeproj -scheme CodexAtoll -configuration Debug -derivedDataPath .build && open .build/Build/Products/Debug/CodexAtoll.app`.
 
+## Sequential Execution Slices
+
+1. Product identity, Apache attribution, app/XCTest targets, and shared scheme.
+2. Native accessory-panel notch shell and neutral local companion route.
+3. Source-labelled Desktop card and verified-identifier ChatGPT activation.
+4. Usage-unavailable detail, official usage URL, and local menu.
+5. Privacy & Data disclosure and phase-wide boundary proof.
+
 ## Out of Scope (Deferred to Later Slices)
 
 - Live CLI lifecycle, task-progress animation, attention events, notifications, and diagnostics (Phase 2).
