@@ -2,7 +2,7 @@
 phase: 1
 slug: honest-desktop-companion
 status: draft
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: false
 created: 2026-08-17
 ---
@@ -38,10 +38,12 @@ created: 2026-08-17
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| W0-01 | TBD | 0 | DESK-01, DESK-03 | T-01 | Desktop card exposes fixed source/unobservable capability and no task controls or inferred lifecycle. | unit | `xcodebuild test -project CodexAtoll.xcodeproj -scheme CodexAtoll -destination 'platform=macOS'` | ❌ W0 | ⬜ pending |
-| W0-02 | TBD | 0 | DESK-02 | T-03 | ChatGPT lookup, launch, activation failure, and success map to explicit outcomes without UI automation. | unit | same full XCTest command | ❌ W0 | ⬜ pending |
-| W0-03 | TBD | 0 | USAGE-01 | T-02 | Usage action opens only `https://chatgpt.com/codex/settings/usage` and never invokes credential or private-data code. | unit + source scan | `xcodebuild test -project CodexAtoll.xcodeproj -scheme CodexAtoll -destination 'platform=macOS' && ! rg -n 'Keychain|OAuth|TokenTracking|ClaudeAPIService|HookSocketServer' CodexAtoll` | ❌ W0 | ⬜ pending |
-| W0-04 | TBD | 0 | PRIV-01, PRIV-05 | T-02 | Privacy view contains prompt, tool/result, session metadata, processing location, retention, and credential/private-data exclusions. | unit + source scan | same full XCTest and negative source scan | ❌ W0 | ⬜ pending |
+| 01-01-01 | 01-01 | 1 | DESK-01, DESK-03 | T-01-01 | Desktop card exposes fixed source/unobservable capability and no task controls or inferred lifecycle. | unit + build | `xcodebuild test -project CodexAtoll.xcodeproj -scheme CodexAtoll -destination 'platform=macOS'` | ❌ W0 | ⬜ pending |
+| 01-01-02 | 01-01 | 1 | DESK-02 | T-01-04 | ChatGPT lookup, launch, activation failure, success, coalescing, and timeout map to explicit outcomes without UI automation. | unit | same full XCTest command | ❌ W0 | ⬜ pending |
+| 01-02-01 | 01-02 | 2 | USAGE-01 | T-02-01 | Usage action opens only `https://chatgpt.com/codex/settings/usage` and never fetches or fabricates quota data. | unit + source scan | same full XCTest command plus the Plan 02 source scan | ❌ W0 | ⬜ pending |
+| 01-02-02 | 01-02 | 2 | USAGE-01 | T-02-05 | Usage/menu controls preserve fixed targets, bounded feedback, retry, accessibility labels, and overflow reachability. | unit + manual accessibility | same full XCTest command | ❌ W0 | ⬜ pending |
+| 01-03-01 | 01-03 | 3 | PRIV-01, PRIV-05 | T-03-02 | Privacy view contains ordered prompt, tool/result, session metadata, processing location, retention, and credential/private-data exclusions. | unit | same full XCTest command | ❌ W0 | ⬜ pending |
+| 01-03-02 | 01-03 | 3 | DESK-01, DESK-02, DESK-03, USAGE-01, PRIV-01, PRIV-05 | T-03-01–05 | Phase boundary rejects inherited side effects, private data, automation, and mutable external targets. | unit + source scan + build | full XCTest/build command plus the Plan 03 source scan | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -74,6 +76,6 @@ created: 2026-08-17
 - [ ] Wave 0 covers all MISSING references
 - [ ] No watch-mode flags
 - [ ] Feedback latency < 60s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] `nyquist_compliant: true` set in frontmatter
 
 **Approval:** pending

@@ -31,7 +31,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. User can open ChatGPT Desktop from that entry and is told clearly which actions must remain in ChatGPT until an official integration is available.
   3. User can open the official Codex usage or limits surface without Codex Atoll requesting or reading account credentials.
   4. Before enabling any integration, user can review the prompt, tool, result, and session metadata Codex Atoll may process.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Bootstrap the native notch tracer, honest Desktop card, and bounded ChatGPT activation.
+- [ ] 01-02-PLAN.md — Add the in-notch usage-unavailable route, official handoff, and accessible menu.
+- [ ] 01-03-PLAN.md — Add Privacy & Data disclosure and prove the full capability/privacy boundary.
 **UI hint**: yes
 
 ### Phase 2: Trusted CLI Monitoring
