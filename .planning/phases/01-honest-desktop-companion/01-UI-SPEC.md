@@ -205,21 +205,20 @@ Every capability badge contains its SF Symbol and literal text. Cards with mixed
 
 ## UI Considerations
 
-Applicable state considerations resolved: 10 covered, 1 backstop, 0 unresolved.
+Probe coverage: 36 applicable considerations; 22 explicit truths, 1 backstop, 13 reasoned dismissals, 0 unresolved.
 
-| Category | Element(s) | Status | Resolution / Reason |
-|----------|------------|--------|---------------------|
-| empty | Privacy & Data integration state | ✅ covered | Shows `No integrations are enabled` and the documented next-step body. |
-| loading | Desktop handoff and usage handoff controls | ✅ covered | No remote data loads in Phase 1; actions use bounded local launch feedback only and never display task/quota loading. |
-| loading | Deferred verified running indicator | ✅ covered | A 16px indeterminate animation is limited to current official/Atoll-owned running events; unverified Desktop and stale sources are static and neutral. |
-| error | ChatGPT and official-usage launch actions | ✅ covered | Keep the current card/detail visible and render the documented actionable error copy. |
-| populated | Expanded companion surface | ✅ covered | Always renders one source-labelled Codex Desktop card; it is not a discovered-task list. |
-| overflow | Expanded view and menu | ✅ covered | Vertical scrolling preserves header, back action, and CTA reachability. |
-| long-text | Desktop explanation, usage explanation, privacy content, CTA labels | ✅ covered | Body wraps to two lines then ellipsizes visually; full copy remains available to VoiceOver; CTA owns a separate final row. |
-| error | Future integration disclosure sheet | 🧪 backstop | A future enable failure keeps the sheet open, reports the failed integration by name, and leaves consent off; verify when an enable action is introduced. |
-| partial | Future verified usage data | ✅ covered | Phase 1 has no partial usage rendering. Future source data must either show all required source/freshness fields or fall back to the unavailable detail. |
-| zero-one-many | Capability cards | ✅ covered | Phase 1 uses a fixed one-card Desktop companion; future mixed capabilities require independent cards rather than inline labels. |
-| long-text | Collapsed notch status | ✅ covered | Closed state uses the fixed icon and neutral symbol only; full capability text is announced to VoiceOver and shown after expansion. |
+| Element | Categories | Status | Resolution / Reason |
+|---------|------------|--------|---------------------|
+| Collapsed notch header | loading, overflow, long-text | ✅ explicit | Phase 1 uses a fixed neutral symbol and no visible long text. Only a current source-qualified official or Atoll-owned `running` event activates the deferred 16px indeterminate `ProgressView`; Reduce Motion uses a static symbol and no percentage is inferred. Full state text is available to VoiceOver and after expansion. |
+| Collapsed notch header | error | dismissed | The header renders fixed local assets and performs no load or submit operation; handoff failures remain on their expanded surfaces. |
+| Expanded Desktop surface | empty, error, populated, overflow, zero-one-many, long-text | ✅ explicit | Always render exactly one ordered source-labelled Desktop card. A failed ChatGPT launch keeps it visible with actionable copy. Overflow scrolls; body copy wraps then ellipsizes with full VoiceOver text and the CTA on its own row. Future mixed capabilities use separate cards. |
+| Expanded Desktop surface | loading, partial | dismissed | The card is fixed local content and fetches no Desktop task fields, so it has neither loading nor partially populated variants. |
+| Usage unavailable detail | loading, error, overflow, long-text | ✅ explicit | Load no quota data. Official-page launch feedback is bounded to 5 seconds; failure retains the detail and shows actionable browser copy. Content scrolls, wraps, and keeps back/CTA reachable. |
+| Privacy & Data page | empty, populated, overflow, zero-one-many, long-text | ✅ explicit | Zero integrations shows the named empty state. The populated contract lists all data categories, processing locations, retention, revocation, deletion, and credential/private-data exclusions. Content scrolls and wraps; future integrations remain independently disclosed. |
+| Privacy & Data page | loading, error, partial | dismissed | Phase 1 renders a fixed local required-section set with no remote load or submit and never presents a partially populated disclosure. |
+| Menu and handoff controls | loading, error, overflow, long-text | ✅ explicit | External actions use bounded local `Opening…` feedback, retain their source surface on failure, never invoke UI automation, preserve 44px targets, scroll if needed, and expose complete accessible labels. |
+| Future integration disclosure sheet | error | 🧪 backstop | `{ statement: "A failed future enable action keeps the sheet open, names the integration, explains the failure, and leaves consent off", verification: backstop }` |
+| Future integration disclosure sheet | empty, loading, populated, partial, overflow, zero-one-many, long-text | dismissed | The runtime sheet is not instantiated in Phase 1. Phase 1 exposes its required disclosure template on the Privacy & Data page; the phase that introduces enablement must probe its live form states again. |
 
 ---
 
@@ -234,11 +233,11 @@ Applicable state considerations resolved: 10 covered, 1 backstop, 0 unresolved.
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved on 2026-08-17
