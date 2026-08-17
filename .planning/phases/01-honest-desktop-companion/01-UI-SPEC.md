@@ -1,7 +1,7 @@
 ---
 phase: 1
 slug: honest-desktop-companion
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-08-17
