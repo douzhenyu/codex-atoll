@@ -102,15 +102,49 @@ Explicitly excluded to protect reliability, security, and project focus.
 
 ## Traceability
 
-Roadmap phase mappings are populated after roadmap approval.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| CORE-01 | Phase 2 | Pending |
+| CORE-02 | Phase 2 | Pending |
+| CORE-03 | Phase 2 | Pending |
+| CORE-04 | Phase 2 | Pending |
+| CLI-01 | Phase 2 | Pending |
+| CLI-02 | Phase 2 | Pending |
+| CLI-03 | Phase 2 | Pending |
+| CLI-04 | Phase 2 | Pending |
+| CLI-05 | Phase 2 | Pending |
+| CLI-06 | Phase 2 | Pending |
+| CLI-07 | Phase 2 | Pending |
+| NAV-01 | Phase 3 | Pending |
+| NAV-02 | Phase 3 | Pending |
+| DESK-01 | Phase 1 | Pending |
+| DESK-02 | Phase 1 | Pending |
+| DESK-03 | Phase 1 | Pending |
+| APPR-01 | Phase 3 | Pending |
+| APPR-02 | Phase 3 | Pending |
+| APPR-03 | Phase 3 | Pending |
+| APPR-04 | Phase 3 | Pending |
+| OWN-01 | Phase 4 | Pending |
+| OWN-02 | Phase 4 | Pending |
+| OWN-03 | Phase 4 | Pending |
+| OWN-04 | Phase 4 | Pending |
+| USAGE-01 | Phase 1 | Pending |
+| USAGE-02 | Phase 4 | Pending |
+| PRIV-01 | Phase 1 | Pending |
+| PRIV-02 | Phase 2 | Pending |
+| PRIV-03 | Phase 2 | Pending |
+| PRIV-04 | Phase 2 | Pending |
+| PRIV-05 | Phase 1 | Pending |
+| REL-01 | Phase 6 | Pending |
+| REL-02 | Phase 5 | Pending |
+| REL-03 | Phase 6 | Pending |
+| REL-04 | Phase 5 | Pending |
+| REL-05 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 36 total
-- Mapped to phases: 0
-- Unmapped: 36 ⚠️
+- Mapped to phases: 36
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-08-17*
