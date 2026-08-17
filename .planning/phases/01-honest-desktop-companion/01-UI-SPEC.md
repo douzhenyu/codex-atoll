@@ -69,11 +69,11 @@ The inherited notch remains dark so it reads as part of macOS hardware, with tex
 |------|-------|-------|
 | Dominant (60%) | `#000000` | Notch background and expanded surface |
 | Secondary (30%) | `#1C1C1E` | Desktop card, usage-unavailable detail card, privacy disclosure sections |
-| Accent (10%) | `#10A37F` | `Open ChatGPT`, `Open official Codex usage`, active focus ring, and verified-data affordances only |
+| Accent (10%) | `#10A37F` | `Open ChatGPT`, `Open official Codex usage`, active focus ring, and verified-data or verified-running affordances only |
 | Destructive | `#FF453A` | Reserved for a future local-data-clear confirmation; no destructive control ships in Phase 1 |
 | Unavailable semantic | `#8E8E93` | Supplemental unavailable icon and divider only; accompanying text is required |
 
-Accent reserved for: `Open ChatGPT`, `Open official Codex usage`, keyboard focus, and later officially verified usage data. Never use accent to imply an unobservable Desktop task is running, waiting, or controllable.
+Accent reserved for: `Open ChatGPT`, `Open official Codex usage`, keyboard focus, and later officially verified usage or running-work indicators. Never use accent to imply an unobservable Desktop task is running, waiting, or controllable.
 
 ---
 
@@ -93,12 +93,26 @@ The expanded default view has one focal point: the `Codex Desktop` companion car
 
 | Element | Composition and placement | Required content | Phase 1 behavior |
 |---------|---------------------------|------------------|------------------|
-| Collapsed notch header | Reuse header/module layout. Codex mark is the leftmost module; neutral unavailable symbol is rightmost. | VoiceOver: `Codex Atoll. Codex Desktop is currently unobservable.` | No persistent `Open ChatGPT` button. Never show a spinner, progress ring, completion tick, approval badge, or inferred Desktop lifecycle state. Clicking anywhere on the notch opens the companion surface. |
+| Collapsed notch header | Reuse header/module layout. Codex mark is the leftmost module; neutral unavailable symbol is rightmost in Phase 1. | VoiceOver: `Codex Atoll. Codex Desktop is currently unobservable.` | No persistent `Open ChatGPT` button. Phase 1 never shows a spinner, progress ring, completion tick, approval badge, or inferred Desktop lifecycle state. Clicking anywhere on the notch opens the companion surface. |
 | Expanded header | Preserve the inherited header row. Place the usage affordance at the top-left; menu affordance remains at the top-right. | `Usage unavailable` plus `Currently unobservable` icon for Phase 1. The icon-only menu control has accessibility label `Open Codex Atoll menu`. | The usage affordance is a button, not a percentage or reset timer. It opens the in-notch usage detail state. |
 | Desktop companion card | First card in the expanded default view; 16px padding, source badge above title, capability badge beside title. | Source: `Codex Desktop`; title: `Codex Desktop`; capability: `Currently unobservable`; explanatory body; primary CTA. | One card has exactly one capability class. It contains no task list, history preview, approval button, prompt box, pause action, or state timeline. |
 | Usage unavailable detail | In-notch detail view, replacing the default card list; top-left back control. | Heading, unavailable explanation, official-link CTA, privacy reassurance. | Displays no numeric quota, reset time, progress ring, chart, heatmap, skeleton, stale value, or retry spinner. |
 | Privacy & Data page | In-notch menu destination using the existing scrollable menu/content pattern. | Plain-language data-boundary sections and future per-integration disclosure template. | Informational in Phase 1; no integration is enabled and no credential field is shown. |
 | Menu rows | Reuse `MenuRow` visual and 8px vertical grouping. | `Open ChatGPT`, `Open official Codex usage`, `Privacy & Data`; retain non-Codex product settings only when still relevant after the fork. | URL/app actions use `NSWorkspace`; replace the reference's Claude token and Hooks rows rather than hiding unsupported behavior behind them. |
+
+### Deferred trusted task-progress indicator
+
+This contract activates only in later phases for a session whose lifecycle state arrives through an official Codex hook/App Server channel or an Atoll-owned connection. It is not a Phase 1 acceptance criterion.
+
+| Verified lifecycle | Collapsed right-side pattern | Text alternative / accessibility label | Percent rule |
+|--------------------|------------------------------|---------------------------------------|--------------|
+| Running | 16px indeterminate circular `ProgressView` in accent, rotating once per second | `Verified Codex work is running` | Never display a percent or estimate one from elapsed time, tokens, or tool count. |
+| Waiting for input | Static `questionmark.circle` in accent; no loop | `Verified Codex work is waiting for input` | No percent. |
+| Waiting for approval | Static `hand.raised.circle` in accent; no loop | `Verified Codex work is waiting for approval` | No percent. |
+| Completed | Static `checkmark.circle` for 2 seconds, then neutral collapsed symbol | `Verified Codex work completed` | No percent. |
+| Interrupted, failed, or disconnected | Static `pause.circle`, `xmark.circle`, or `wifi.slash` respectively; no loop | State-specific verified status | No percent. |
+
+The source-qualified state must be current and verified before any pattern is rendered. `Codex Desktop`, stale data, connection loss without a verified terminal event, and any unverified source always use the static neutral unavailable symbol; they never animate.
 
 ### Capability badges
 
@@ -121,6 +135,13 @@ Every capability badge contains its SF Symbol and literal text. Cards with mixed
 3. Only a verified, blocking request from a future observable or Atoll-owned source may automatically open the notch. Phase 1 emits no such request, so it never auto-expands for Desktop activity.
 4. For a valid future auto-expansion, retract after 5 seconds without interaction. Once interaction begins, retract 300ms after both pointer and keyboard focus leave. Cancel either retraction while the pointer or focus returns.
 5. Close/open transitions use the inherited SwiftUI spring. With Reduce Motion enabled, use a 150ms opacity/size transition with no bounce or looping motion.
+
+### Trusted task-progress animation (deferred activation)
+
+1. The right-side collapsed-notch animation is an indeterminate activity signal, not a progress meter. Render it only for a source-qualified session with a current officially observable or Atoll-owned `running` event.
+2. Waiting-for-input and waiting-for-approval replace the loop with their static icons and trigger the later verified-interaction expansion policy. Completed, interrupted, failed, and disconnected states use static terminal icons only; completed returns to neutral after 2 seconds.
+3. When Reduce Motion is enabled, replace the running loop with a static `arrow.triangle.2.circlepath` icon and the same VoiceOver label. No animation is allowed in reduced-motion mode.
+4. Never infer completion percentage, duration, remaining work, or execution state. Desktop and every unverified/stale source remain neutral and static, even when ChatGPT itself is open.
 
 ### Codex Desktop handoff
 
@@ -164,6 +185,8 @@ Every capability badge contains its SF Symbol and literal text. Cards with mixed
 | Privacy empty state | `No integrations are enabled` |
 | Privacy empty-state body | `Codex Atoll is not monitoring Codex. Before an integration is enabled, you can review exactly what data it may process.` |
 | Credential assurance | `Codex Atoll never asks for your Codex OAuth token, session cookie, or Keychain credential.` |
+| Future verified running label | `Verified Codex work is running` |
+| Future verified waiting labels | `Verified Codex work is waiting for input`; `Verified Codex work is waiting for approval` |
 | Destructive confirmation | None in Phase 1. Future `Clear local data` confirmation: `Delete Codex Atoll's saved local activity? This cannot be undone and does not affect Codex or ChatGPT data.` |
 
 ---
@@ -173,6 +196,7 @@ Every capability badge contains its SF Symbol and literal text. Cards with mixed
 - All controls have visible keyboard focus. `Open ChatGPT`, `Open official Codex usage`, the menu control labelled `Open Codex Atoll menu`, and back controls are reachable with VoiceOver and keyboard navigation.
 - The Codex mark has an accessible label; a purely decorative unavailable glyph is hidden from VoiceOver when its adjacent badge label is announced.
 - Capability is always conveyed by literal text plus icon. Color and motion are supplemental only.
+- The deferred running `ProgressView` has the accessibility label `Verified Codex work is running`; its Reduce Motion replacement is static. All waiting and terminal patterns use their table labels, and none exposes a percentage value.
 - Card bodies wrap to two lines in the expanded notch, then truncate with an ellipsis. A VoiceOver hint exposes the full body. Do not let long localized strings cover the CTA; retain the CTA on its own final row.
 - The expanded body scrolls vertically when content exceeds the inherited notch height. Headers, back action, and primary CTA remain reachable; do not shrink text below 12px.
 - External launch actions have no data-loading state. Only the local action result may show transient `Opening ChatGPT…` text for up to 5 seconds, never a task-progress spinner.
@@ -181,12 +205,13 @@ Every capability badge contains its SF Symbol and literal text. Cards with mixed
 
 ## UI Considerations
 
-Applicable state considerations resolved: 9 covered, 1 backstop, 0 unresolved.
+Applicable state considerations resolved: 10 covered, 1 backstop, 0 unresolved.
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
 | empty | Privacy & Data integration state | ✅ covered | Shows `No integrations are enabled` and the documented next-step body. |
 | loading | Desktop handoff and usage handoff controls | ✅ covered | No remote data loads in Phase 1; actions use bounded local launch feedback only and never display task/quota loading. |
+| loading | Deferred verified running indicator | ✅ covered | A 16px indeterminate animation is limited to current official/Atoll-owned running events; unverified Desktop and stale sources are static and neutral. |
 | error | ChatGPT and official-usage launch actions | ✅ covered | Keep the current card/detail visible and render the documented actionable error copy. |
 | populated | Expanded companion surface | ✅ covered | Always renders one source-labelled Codex Desktop card; it is not a discovered-task list. |
 | overflow | Expanded view and menu | ✅ covered | Vertical scrolling preserves header, back action, and CTA reachability. |
