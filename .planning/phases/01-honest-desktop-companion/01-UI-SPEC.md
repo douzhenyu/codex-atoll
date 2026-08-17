@@ -42,7 +42,7 @@ Declared values (all normal layout values are multiples of 4):
 | 2xl | 48px | Reserved only for a full-page privacy empty-state break |
 | 3xl | 64px | Not used in the notch; retained as the shared scale ceiling |
 
-Exceptions: preserve the inherited notch geometry (`ModuleLayoutEngine` outer edge inset 6px and shape edge margin 8px). Icon-only controls must have a 44px by 44px hit target even when their visible glyph is 16px.
+Exceptions: use an 8px outer edge inset and 8px shape edge margin for the Phase 1 notch shell; do not carry forward the reference's noncompliant outer inset. Icon-only controls must have a 44px by 44px hit target even when their visible glyph is 16px.
 
 ---
 
@@ -77,12 +77,24 @@ Accent reserved for: `Open ChatGPT`, `Open official Codex usage`, keyboard focus
 
 ---
 
+## Visual Hierarchy
+
+The expanded default view has one focal point: the `Codex Desktop` companion card. Its fixed reading order is:
+
+1. Source and capability badge: `Codex Desktop` and `Currently unobservable`.
+2. Explanation: why current state, history, and approvals cannot be shown in Atoll.
+3. Primary action: `Open ChatGPT`.
+
+`Usage unavailable` is a secondary top-left header affordance, not a competing card or a source of task status. The top-right menu affordance is tertiary navigation.
+
+---
+
 ## Component Inventory
 
 | Element | Composition and placement | Required content | Phase 1 behavior |
 |---------|---------------------------|------------------|------------------|
 | Collapsed notch header | Reuse header/module layout. Codex mark is the leftmost module; neutral unavailable symbol is rightmost. | VoiceOver: `Codex Atoll. Codex Desktop is currently unobservable.` | No persistent `Open ChatGPT` button. Never show a spinner, progress ring, completion tick, approval badge, or inferred Desktop lifecycle state. Clicking anywhere on the notch opens the companion surface. |
-| Expanded header | Preserve the inherited header row. Place the usage affordance at the top-left; menu affordance remains at the top-right. | `Usage unavailable` plus `Currently unobservable` icon for Phase 1. | The usage affordance is a button, not a percentage or reset timer. It opens the in-notch usage detail state. |
+| Expanded header | Preserve the inherited header row. Place the usage affordance at the top-left; menu affordance remains at the top-right. | `Usage unavailable` plus `Currently unobservable` icon for Phase 1. The icon-only menu control has accessibility label `Open Codex Atoll menu`. | The usage affordance is a button, not a percentage or reset timer. It opens the in-notch usage detail state. |
 | Desktop companion card | First card in the expanded default view; 16px padding, source badge above title, capability badge beside title. | Source: `Codex Desktop`; title: `Codex Desktop`; capability: `Currently unobservable`; explanatory body; primary CTA. | One card has exactly one capability class. It contains no task list, history preview, approval button, prompt box, pause action, or state timeline. |
 | Usage unavailable detail | In-notch detail view, replacing the default card list; top-left back control. | Heading, unavailable explanation, official-link CTA, privacy reassurance. | Displays no numeric quota, reset time, progress ring, chart, heatmap, skeleton, stale value, or retry spinner. |
 | Privacy & Data page | In-notch menu destination using the existing scrollable menu/content pattern. | Plain-language data-boundary sections and future per-integration disclosure template. | Informational in Phase 1; no integration is enabled and no credential field is shown. |
@@ -158,7 +170,7 @@ Every capability badge contains its SF Symbol and literal text. Cards with mixed
 
 ## Accessibility and Content Resilience
 
-- All controls have visible keyboard focus. `Open ChatGPT`, `Open official Codex usage`, menu, and back controls are reachable with VoiceOver and keyboard navigation.
+- All controls have visible keyboard focus. `Open ChatGPT`, `Open official Codex usage`, the menu control labelled `Open Codex Atoll menu`, and back controls are reachable with VoiceOver and keyboard navigation.
 - The Codex mark has an accessible label; a purely decorative unavailable glyph is hidden from VoiceOver when its adjacent badge label is announced.
 - Capability is always conveyed by literal text plus icon. Color and motion are supplemental only.
 - Card bodies wrap to two lines in the expanded notch, then truncate with an ellipsis. A VoiceOver hint exposes the full body. Do not let long localized strings cover the CTA; retain the CTA on its own final row.
