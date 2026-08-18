@@ -186,6 +186,62 @@ final class CapabilityContractTests: XCTestCase {
         )
     }
 
+    // MARK: - Menu contract
+
+    func testMenuButtonAccessibilityLabelIsExact() {
+        XCTAssertEqual(NotchStrings.openMenu, "Open Codex Atoll menu")
+        XCTAssertEqual(NotchStrings.quit, "Quit Codex Atoll")
+    }
+
+    func testMenuDescriptorsMatchUISpecContract() {
+        let items = NotchMenuView.items
+        XCTAssertEqual(items.count, 4)
+        XCTAssertEqual(
+            items.map(\.label),
+            ["Open ChatGPT", "Open official Codex usage", "Back", "Quit Codex Atoll"],
+        )
+        XCTAssertEqual(items.map(\.action), [.openChatGPT, .openOfficialUsage, .back, .quit])
+    }
+
+    func testMenuRouteTogglesToMenuAndBack() {
+        let model = NotchViewModel(geometry: Self.testGeometry)
+
+        model.notchOpen()
+        model.openMenu()
+        XCTAssertEqual(model.destination, .menu)
+
+        model.goBack()
+        XCTAssertEqual(model.destination, .companion)
+        XCTAssertEqual(model.status, .open, "Menu back must not close the notch")
+    }
+
+    func testLocalDestinationsCarryNoQuotaOrAccountData() {
+        // The route enum is payload-free by construction (no associated values);
+        // this proves the full Phase 1 local destination set and that no route
+        // can carry quota, history, or account data.
+        let destinations = Set(NotchDestination.allCases.map { "\($0)" })
+        XCTAssertEqual(destinations, Set(["companion", "usageUnavailable", "menu"]))
+    }
+
+    func testNoBareWorkspaceCallsInSwiftUIViews() throws {
+        // Every external handoff must go through the tested launcher, never a
+        // bare workspace call from a SwiftUI view or component file.
+        let forbidden = ["NSWorkspace.shared.open"]
+        let viewSources = try Self.appSwiftSources().filter { file in
+            let path = file.url.path
+            return path.contains("/UI/Views/") || path.contains("/UI/Components/")
+        }
+        XCTAssertFalse(viewSources.isEmpty, "Expected SwiftUI view sources under CodexAtoll/UI")
+
+        for token in forbidden {
+            let offenders = viewSources.filter { $0.text.contains(token) }
+            XCTAssertTrue(
+                offenders.isEmpty,
+                "Bare '\(token)' found in SwiftUI view source \(offenders.map(\.url.lastPathComponent))",
+            )
+        }
+    }
+
     // MARK: - Forbidden production inventory
 
     func testProductionInventoryRejectsInheritedServicesAndPersistence() throws {
