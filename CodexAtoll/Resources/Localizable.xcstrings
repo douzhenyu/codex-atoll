@@ -21,6 +21,16 @@
         }
       }
     },
+    "Before enabling an integration" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before enabling an integration"
+          }
+        }
+      }
+    },
     "ChatGPT could not be opened. Open it from Applications, then try again." : {
       "localizations" : {
         "en" : {
@@ -71,6 +81,46 @@
         }
       }
     },
+    "Codex Atoll does not read ChatGPT or Codex Desktop private databases." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll does not read ChatGPT or Codex Desktop private databases."
+          }
+        }
+      }
+    },
+    "Codex Atoll does not read UI-scraped task data." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll does not read UI-scraped task data."
+          }
+        }
+      }
+    },
+    "Codex Atoll is not monitoring Codex. Before an integration is enabled, you can review exactly what data it may process." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll is not monitoring Codex. Before an integration is enabled, you can review exactly what data it may process."
+          }
+        }
+      }
+    },
+    "Codex Atoll never asks for your Codex OAuth token, session cookie, or Keychain credential." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll never asks for your Codex OAuth token, session cookie, or Keychain credential."
+          }
+        }
+      }
+    },
     "Codex Atoll. Codex Desktop is currently unobservable." : {
       "localizations" : {
         "en" : {
@@ -91,6 +141,16 @@
         }
       }
     },
+    "Credentials and private data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credentials and private data"
+          }
+        }
+      }
+    },
     "Currently unobservable" : {
       "localizations" : {
         "en" : {
@@ -101,12 +161,82 @@
         }
       }
     },
+    "Disclosed before enabling and again on revocation." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disclosed before enabling and again on revocation."
+          }
+        }
+      }
+    },
+    "How long each category above is kept." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How long each category above is kept."
+          }
+        }
+      }
+    },
+    "If enabling an integration fails, the disclosure sheet stays open, names the integration, explains the failure, and leaves consent off." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If enabling an integration fails, the disclosure sheet stays open, names the integration, explains the failure, and leaves consent off."
+          }
+        }
+      }
+    },
+    "Integration identity" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integration identity"
+          }
+        }
+      }
+    },
+    "Integrations are off by default, authorized independently, and revocable at any time. You can clear Codex Atoll-owned local data without affecting Codex or ChatGPT." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Integrations are off by default, authorized independently, and revocable at any time. You can clear Codex Atoll-owned local data without affecting Codex or ChatGPT."
+          }
+        }
+      }
+    },
     "Jump only" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Jump only"
+          }
+        }
+      }
+    },
+    "No integrations are enabled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No integrations are enabled"
+          }
+        }
+      }
+    },
+    "On device in Codex Atoll while no integration is enabled; by a provider only after you authorize it." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On device in Codex Atoll while no integration is enabled; by a provider only after you authorize it."
           }
         }
       }
@@ -161,6 +291,46 @@
         }
       }
     },
+    "Privacy & Data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy & Data"
+          }
+        }
+      }
+    },
+    "Processing location" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Processing location"
+          }
+        }
+      }
+    },
+    "Prompt text" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prompt text"
+          }
+        }
+      }
+    },
+    "Prompts and instructions you send while the integration is active." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prompts and instructions you send while the integration is active."
+          }
+        }
+      }
+    },
     "Quit Codex Atoll" : {
       "localizations" : {
         "en" : {
@@ -171,12 +341,132 @@
         }
       }
     },
+    "Retained for the period the integration provider documents." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retained for the period the integration provider documents."
+          }
+        }
+      }
+    },
+    "Retained only while the integration stays enabled." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retained only while the integration stays enabled."
+          }
+        }
+      }
+    },
+    "Retention" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retention"
+          }
+        }
+      }
+    },
+    "Session/status metadata" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session/status metadata"
+          }
+        }
+      }
+    },
+    "Sent to the integration provider you authorize; never stored by Codex Atoll." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sent to the integration provider you authorize; never stored by Codex Atoll."
+          }
+        }
+      }
+    },
+    "Stated again immediately before you enable an integration." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stated again immediately before you enable an integration."
+          }
+        }
+      }
+    },
+    "Stated per integration immediately before you enable it." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stated per integration immediately before you enable it."
+          }
+        }
+      }
+    },
+    "Stored locally in Codex Atoll; shared only after you enable the integration." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stored locally in Codex Atoll; shared only after you enable the integration."
+          }
+        }
+      }
+    },
+    "The integration being considered and the provider that would receive data." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The integration being considered and the provider that would receive data."
+          }
+        }
+      }
+    },
     "The official Codex usage page could not be opened. Check your default browser, then try again." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "The official Codex usage page could not be opened. Check your default browser, then try again."
+          }
+        }
+      }
+    },
+    "Timestamps and status changes that describe when work happened." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timestamps and status changes that describe when work happened."
+          }
+        }
+      }
+    },
+    "Tool calls and results" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tool calls and results"
+          }
+        }
+      }
+    },
+    "Tool invocations the integration makes and their returned results." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tool invocations the integration makes and their returned results."
           }
         }
       }
@@ -197,6 +487,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usage unavailable"
+          }
+        }
+      }
+    },
+    "What an integration may process" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What an integration may process"
+          }
+        }
+      }
+    },
+    "Where each category above is processed and who can access it." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where each category above is processed and who can access it."
+          }
+        }
+      }
+    },
+    "Your control" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your control"
           }
         }
       }

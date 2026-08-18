@@ -324,7 +324,7 @@ final class CapabilityContractTests: XCTestCase {
         let control = PrivacyStrings.controlBody
         XCTAssertTrue(control.contains("off by default"), "Control copy must state integrations start off")
         XCTAssertTrue(control.contains("independently"), "Control copy must state independent authorization")
-        XCTAssertTrue(control.contains("revoke"), "Control copy must state revocation")
+        XCTAssertTrue(control.contains("revocable"), "Control copy must state revocation")
         XCTAssertTrue(control.contains("clear Codex Atoll-owned local data"), "Control copy must state local-data clearing")
     }
 

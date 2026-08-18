@@ -30,6 +30,7 @@ enum NotchDestination: CaseIterable, Equatable, Sendable {
     case companion
     case usageUnavailable
     case menu
+    case privacyData
 }
 
 // MARK: - NotchViewModel
@@ -105,6 +106,13 @@ final class NotchViewModel {
     /// Return to the companion route without closing the notch.
     func goBack() {
         self.destination = .companion
+    }
+
+    /// Navigate to the always-accessible Privacy & Data page. Informational
+    /// only: no integration is enabled and no consent or credential is
+    /// requested (D-12, D-15, D-16).
+    func openPrivacyData() {
+        self.destination = .privacyData
     }
 
     // MARK: Private

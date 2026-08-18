@@ -333,10 +333,15 @@ struct NotchView: View {
         case .menu:
             NotchMenuView(
                 onBack: { self.viewModel.goBack() },
+                onOpenPrivacy: { self.viewModel.openPrivacyData() },
                 onQuit: { NSApplication.shared.terminate(nil) },
             )
             .padding(.horizontal, 12)
             .padding(.bottom, 12)
+        case .privacyData:
+            PrivacyDataView(onBack: { self.viewModel.goBack() })
+                .padding(.horizontal, 12)
+                .padding(.bottom, 12)
         }
     }
 }

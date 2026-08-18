@@ -18,6 +18,7 @@ struct NotchMenuView: View {
     enum Action: Equatable, Sendable {
         case openChatGPT
         case openOfficialUsage
+        case privacyData
         case back
         case quit
     }
@@ -34,6 +35,7 @@ struct NotchMenuView: View {
     static let items: [MenuItem] = [
         MenuItem(id: "open-chatgpt", icon: "message", label: NotchStrings.openChatGPT, action: .openChatGPT),
         MenuItem(id: "open-usage", icon: "arrow.up.right.square", label: NotchStrings.usageCTA, action: .openOfficialUsage),
+        MenuItem(id: "privacy-data", icon: "lock.shield", label: PrivacyStrings.title, action: .privacyData),
         MenuItem(id: "back", icon: "chevron.left", label: NotchStrings.back, action: .back),
         MenuItem(id: "quit", icon: "power", label: NotchStrings.quit, action: .quit),
     ]
@@ -42,11 +44,13 @@ struct NotchMenuView: View {
 
     init(
         onBack: @escaping () -> Void,
+        onOpenPrivacy: @escaping () -> Void,
         onQuit: @escaping () -> Void,
         chatGPTLauncher: DesktopHandoffLauncher = DesktopHandoffLauncher(),
         usageLauncher: DesktopHandoffLauncher = DesktopHandoffLauncher(),
     ) {
         self.onBack = onBack
+        self.onOpenPrivacy = onOpenPrivacy
         self.onQuit = onQuit
         self._chatGPTLauncher = State(initialValue: chatGPTLauncher)
         self._usageLauncher = State(initialValue: usageLauncher)
@@ -55,6 +59,7 @@ struct NotchMenuView: View {
     // MARK: Internal
 
     let onBack: () -> Void
+    let onOpenPrivacy: () -> Void
     let onQuit: () -> Void
 
     var body: some View {
@@ -90,7 +95,7 @@ struct NotchMenuView: View {
             chatGPTState == .opening ? NotchStrings.openingChatGPT : item.label
         case .openOfficialUsage:
             usageState == .opening ? NotchStrings.usageOpening : item.label
-        case .back, .quit:
+        case .privacyData, .back, .quit:
             item.label
         }
     }
@@ -111,6 +116,8 @@ struct NotchMenuView: View {
                 Task { await self.chatGPTLauncher.openChatGPT() }
             case .openOfficialUsage:
                 Task { await self.usageLauncher.openOfficialUsage() }
+            case .privacyData:
+                self.onOpenPrivacy()
             case .back:
                 self.onBack()
             case .quit:
