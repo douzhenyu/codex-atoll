@@ -75,6 +75,12 @@ enum HandoffError: Error, Equatable, Sendable {
     case timedOut
 }
 
+/// The settled result of a bounded activation request.
+private enum HandoffOutcome: Equatable, Sendable {
+    case success
+    case failure(HandoffError)
+}
+
 // MARK: - DesktopHandoffLauncher
 
 /// Bounded, main-actor ChatGPT activation owned by the Desktop card.
@@ -85,30 +91,62 @@ final class DesktopHandoffLauncher {
     /// `com.openai.codex` bundle is present; aliases are never guessed.
     static let chatGPTBundleIdentifiers: [String] = ["com.openai.codex"]
 
+    /// Production bound for the native request. Tests inject a shorter value
+    /// so they never sleep the real five-second bound.
+    static let productionTimeout: Duration = .seconds(5)
+
     private let workspace: any WorkspaceOpening
+    private let timeout: Duration
 
     private(set) var state: HandoffState = .idle
 
-    init(workspace: any WorkspaceOpening = SystemWorkspace()) {
+    init(
+        workspace: any WorkspaceOpening = SystemWorkspace(),
+        timeout: Duration = DesktopHandoffLauncher.productionTimeout,
+    ) {
         self.workspace = workspace
+        self.timeout = timeout
     }
 
     /// Ask Launch Services to open and activate the registered ChatGPT app.
-    /// Success means only that macOS accepted/activated the request.
+    /// Coalesces: a second tap while `.opening` issues no second request.
+    /// Every completion path returns to an actionable local state.
     func openChatGPT() async {
+        guard self.state != .opening else { return }
         self.state = .opening
-        let outcome = await self.performOpen()
+        let outcome = await self.runBounded()
         self.finish(outcome)
     }
 
     // MARK: Private
 
-    private enum Outcome: Equatable, Sendable {
-        case success
-        case failure(HandoffError)
+    /// Race the native request against the injected duration. Whichever
+    /// finishes first settles the result; a hanging request times out exactly.
+    private func runBounded() async -> HandoffOutcome {
+        await withTaskGroup(of: HandoffOutcome.self) { group in
+            group.addTask {
+                await self.performOpen()
+            }
+            group.addTask {
+                do {
+                    try await Task.sleep(for: self.timeout)
+                    return HandoffOutcome.failure(.timedOut)
+                } catch {
+                    // Cancelled when the open wins the race; the result is
+                    // discarded by the cancelled group.
+                    return HandoffOutcome.failure(.timedOut)
+                }
+            }
+
+            guard let first = await group.next() else {
+                return HandoffOutcome.failure(.timedOut)
+            }
+            group.cancelAll()
+            return first
+        }
     }
 
-    private func performOpen() async -> Outcome {
+    private func performOpen() async -> HandoffOutcome {
         for bundleIdentifier in Self.chatGPTBundleIdentifiers {
             guard let url = self.workspace.urlForApplication(withBundleIdentifier: bundleIdentifier) else {
                 continue
@@ -129,7 +167,7 @@ final class DesktopHandoffLauncher {
         return .failure(.applicationUnavailable)
     }
 
-    private func finish(_ outcome: Outcome) {
+    private func finish(_ outcome: HandoffOutcome) {
         switch outcome {
         case .success:
             self.state = .idle
