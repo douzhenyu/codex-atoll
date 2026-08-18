@@ -53,11 +53,11 @@ Requirements for the first public release. Each requirement maps to exactly one 
 
 ### Privacy and Local Security
 
-- [ ] **PRIV-01**: User can review what prompt, tool, result, and session metadata Codex Atoll may process before enabling monitoring.
+- [x] **PRIV-01**: User can review what prompt, tool, result, and session metadata Codex Atoll may process before enabling monitoring.
 - [ ] **PRIV-02**: User can choose whether captured activity is live-only or retained locally for a bounded period.
 - [ ] **PRIV-03**: User can clear retained Codex Atoll activity data from the app.
 - [ ] **PRIV-04**: User's local bridge accepts events and approval responses only from the current user's authenticated Codex Atoll integration.
-- [ ] **PRIV-05**: User is never asked to give Codex Atoll their Codex OAuth token, session cookie, or Keychain credential for monitoring or usage display.
+- [x] **PRIV-05**: User is never asked to give Codex Atoll their Codex OAuth token, session cookie, or Keychain credential for monitoring or usage display.
 
 ### Public Release
 
@@ -130,11 +130,11 @@ Explicitly excluded to protect reliability, security, and project focus.
 | OWN-04 | Phase 4 | Pending |
 | USAGE-01 | Phase 1 | Complete |
 | USAGE-02 | Phase 4 | Pending |
-| PRIV-01 | Phase 1 | Pending |
+| PRIV-01 | Phase 1 | Complete |
 | PRIV-02 | Phase 2 | Pending |
 | PRIV-03 | Phase 2 | Pending |
 | PRIV-04 | Phase 2 | Pending |
-| PRIV-05 | Phase 1 | Pending |
+| PRIV-05 | Phase 1 | Complete |
 | REL-01 | Phase 6 | Pending |
 | REL-02 | Phase 5 | Pending |
 | REL-03 | Phase 6 | Pending |

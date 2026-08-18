@@ -4,16 +4,16 @@ milestone: v1.0
 milestone_name: milestone
 current_phase: 01
 current_phase_name: Honest Desktop Companion
-status: executing
-stopped_at: Completed 01-04-PLAN.md
-last_updated: "2026-08-18T06:20:15.346Z"
+status: verifying
+stopped_at: Completed 01-05-PLAN.md
+last_updated: "2026-08-18T06:40:14.213Z"
 last_activity: 2026-08-18
 last_activity_desc: Phase 01 execution started
 progress:
   total_phases: 1
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-08-17)
 
 Phase: 01 (Honest Desktop Companion) — EXECUTING
 Plan: 5 of 5
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-08-18 — Phase 01 execution started
 
-Progress: [████████░░] 80%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -61,6 +61,7 @@ Progress: [████████░░] 80%
 | Phase 01-honest-desktop-companion P01-02 | 11 | 2 tasks | 10 files |
 | Phase 01-honest-desktop-companion P01-03 | 10 | 2 tasks | 8 files |
 | Phase 01-honest-desktop-companion P04 | 6 | 2 tasks | 9 files |
+| Phase 01 P05 | 12 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,10 @@ Recent decisions affecting current work:
 - [Phase ?]: The official usage handoff is the full data boundary: a single compile-time officialUsageURL opened in the default browser, with no fetch, embed, parse, cache, estimate, or retained page/account value
 - [Phase ?]: Routing stays payload-free and in-place: .usageUnavailable and .menu carry no associated data; Back returns to .companion without closing the notch
 - [Phase ?]: Each external surface owns its launcher instance, so the usage detail, Desktop card, and menu each render bounded Opening feedback and their exact retryable error on their own surface
+- [Phase ?]: The Privacy & Data page owns its copy in a dedicated PrivacyStrings enum inside PrivacyDataView.swift; DisclosureCategory cases resolve their own localized title/body/location/retention
+- [Phase ?]: The six disclosure rows are all DisclosureCategory cases (including the umbrella processing-location and retention rows); prompt/tool/session data rows each carry non-empty location and retention so no merged generic row is possible
+- [Phase ?]: The held-out enablement backstop is a named production contract (PrivacyDataView.enableFailureBackstopContract) rendered in the Before-enabling section and registered by a test, satisfying the UI-SPEC backstop without a live enable action
+- [Phase ?]: PhaseBoundaryTests assert API identifiers and class/route names only (SecItemCopyMatching, ASWebAuthenticationSession, HTTPCookieStorage, AXUIElement) so the human-readable OAuth/session-cookie/Keychain assurance copy stays legal
 
 ### Pending Todos
 
@@ -105,6 +110,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-08-18T06:20:15.324Z
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-08-18T06:40:14.203Z
+Stopped at: Completed 01-05-PLAN.md
 Resume file: None
