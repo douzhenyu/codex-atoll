@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can open the official Codex usage or limits surface without Codex Atoll requesting or reading account credentials.
   4. Before enabling any integration, user can review the prompt, tool, result, and session metadata Codex Atoll may process.
 
-**Plans**: 1/5 plans executed
+**Plans**: 2/5 plans executed
 
 Plans:
 **Wave 1**
@@ -44,7 +44,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02-PLAN.md — Wire the native collapsed/open notch shell and neutral local companion route.
+- [x] 01-02-PLAN.md — Wire the native collapsed/open notch shell and neutral local companion route.
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -145,7 +145,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Honest Desktop Companion | 1/5 | In Progress|  |
+| 1. Honest Desktop Companion | 2/5 | In Progress|  |
 | 2. Trusted CLI Monitoring | 0/TBD | Not started | - |
 | 3. Safe CLI Actions | 0/TBD | Not started | - |
 | 4. Atoll-Owned Sessions | 0/TBD | Not started | - |
