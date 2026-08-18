@@ -72,6 +72,59 @@ final class CapabilityContractTests: XCTestCase {
         )
     }
 
+    // MARK: - Desktop card contract
+
+    func testDesktopCompanionRendersExactlyOneOrderedCard() {
+        // The expanded companion always renders exactly one ordered card,
+        // even with no task data. It must never become empty or a list.
+        let cards = DesktopCompanionView.cards
+        XCTAssertEqual(cards.count, 1)
+        XCTAssertEqual(cards.first?.source, "Codex Desktop")
+    }
+
+    func testDesktopCardCapabilityIsCurrentlyUnobservable() throws {
+        let card = try XCTUnwrap(DesktopCompanionView.cards.first)
+        XCTAssertEqual(card.capability, .currentlyUnobservable)
+        XCTAssertEqual(card.capability.label, "Currently unobservable")
+        XCTAssertEqual(card.capability.systemImage, "eye.slash")
+    }
+
+    func testDesktopCardCopyMatchesUISpecContract() throws {
+        let card = try XCTUnwrap(DesktopCompanionView.cards.first)
+        XCTAssertEqual(card.source, "Codex Desktop")
+        XCTAssertEqual(
+            card.body,
+            "Codex Atoll cannot obtain current Codex runtime information. Review task details, history, approvals, and actions in ChatGPT until an official integration is available.",
+        )
+        XCTAssertEqual(card.action, "Open ChatGPT")
+        XCTAssertEqual(card.opening, "Opening ChatGPT…")
+        XCTAssertEqual(
+            card.error,
+            "ChatGPT could not be opened. Open it from Applications, then try again.",
+        )
+    }
+
+    func testCapabilityClassVocabularyIsComplete() {
+        XCTAssertEqual(CapabilityClass.available.label, "Available")
+        XCTAssertEqual(CapabilityClass.available.systemImage, "checkmark.circle")
+        XCTAssertEqual(CapabilityClass.jumpOnly.label, "Jump only")
+        XCTAssertEqual(CapabilityClass.jumpOnly.systemImage, "arrow.up.right.square")
+        XCTAssertEqual(CapabilityClass.currentlyUnobservable.label, "Currently unobservable")
+        XCTAssertEqual(CapabilityClass.currentlyUnobservable.systemImage, "eye.slash")
+    }
+
+    func testOpeningStateBindsOnlyToTransientOpeningText() throws {
+        let card = try XCTUnwrap(DesktopCompanionView.cards.first)
+        // Only the local action result may show transient `Opening ChatGPT…`;
+        // the idle/error/retry surface keeps the exact action label.
+        XCTAssertEqual(DesktopCompanionView.ctaTitle(for: .opening, card: card), "Opening ChatGPT…")
+        XCTAssertEqual(DesktopCompanionView.ctaTitle(for: .idle, card: card), "Open ChatGPT")
+        XCTAssertEqual(
+            DesktopCompanionView.ctaTitle(for: .failed(.timedOut), card: card),
+            "Open ChatGPT",
+        )
+    }
+
     // MARK: - Forbidden production inventory
 
     func testProductionInventoryRejectsInheritedServicesAndPersistence() throws {
