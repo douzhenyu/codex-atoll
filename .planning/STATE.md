@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-current_phase: 1
+current_phase: 01
 current_phase_name: Honest Desktop Companion
 status: executing
-stopped_at: Phase 1 UI-SPEC approved
-last_updated: "2026-08-18T00:54:34.394Z"
-last_activity: 2026-08-17
-last_activity_desc: v1 roadmap created; all 36 requirements mapped.
+stopped_at: Completed 01-01-PLAN.md; next plan 01-02
+last_updated: "2026-08-18T05:29:45.814Z"
+last_activity: 2026-08-18
+last_activity_desc: Phase 01 execution started
 progress:
   total_phases: 1
   completed_phases: 0
   total_plans: 5
-  completed_plans: 0
+  completed_plans: 1
 ---
 
 # Project State
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-17)
 
 **Core value:** Codex users can notice and handle tasks that need attention without interrupting their current workflow.
-**Current focus:** Phase 1 — Honest Desktop Companion
+**Current focus:** Phase 01 — Honest Desktop Companion
 
 ## Current Position
 
-Phase: 1 of 6 (Honest Desktop Companion)
-Plan: Not yet planned
+Phase: 01 (Honest Desktop Companion) — EXECUTING
+Plan: 2 of 5
 Status: Ready to execute
-Last activity: 2026-08-17 — v1 roadmap created; all 36 requirements mapped.
+Last activity: 2026-08-18 — Phase 01 execution started
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
@@ -53,6 +53,12 @@ Progress: [░░░░░░░░░░] 0%
 - Last 5 plans: -
 - Trend: Not enough data
 
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 01-honest-desktop-companion P01 | 40 | 2 tasks | 11 files |
+
 ## Accumulated Context
 
 ### Decisions
@@ -63,6 +69,9 @@ Recent decisions affecting current work:
 - [Milestone v1]: Ship Codex CLI and Desktop together; Desktop v1 is source-labelled activation and explicit fallback only.
 - [Milestone v1]: Direct approvals require an authenticated, live, request-scoped official integration; otherwise return to native Codex.
 - [Milestone v1]: Public distribution requires a signed, notarized DMG and a signed Sparkle feed.
+- [Phase 01]: Use the reference Claude Atoll project as provenance source: preserve Apache-2.0 LICENSE and pin snapshot 4e7cf858faa3e013b73150a5e4d41355c4f5be4e in NOTICE
+- [Phase 01]: Development bundle identity is com.codexatoll.CodexAtoll; public Team/bundle/Sparkle identity is deferred to Phase 6
+- [Phase 01]: Empty Settings-scene entry creates no ordinary window or inherited runtime side effect until Plan 02 attaches the accessory lifecycle
 
 ### Pending Todos
 
@@ -83,6 +92,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-08-17T14:24:04.886Z
-Stopped at: Phase 1 UI-SPEC approved
-Resume file: .planning/phases/01-honest-desktop-companion/01-UI-SPEC.md
+Last session: 2026-08-18T05:29:45.805Z
+Stopped at: Completed 01-01-PLAN.md; next plan 01-02
+Resume file: .planning/phases/01-honest-desktop-companion/01-02-PLAN.md
