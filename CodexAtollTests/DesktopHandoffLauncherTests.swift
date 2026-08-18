@@ -207,6 +207,7 @@ final class DesktopHandoffLauncherTests: XCTestCase {
         // the injected bound, for both the ChatGPT activation and the official
         // usage handoff. Neither path may leave a surface stuck `.opening`.
         let fake = WorkspaceFake()
+        fake.lookupURL = URL(string: "file:///Applications/ChatGPT.app")
         fake.openHandler = { _ in
             try await Task.sleep(for: .seconds(30))
             return FakeApp(activateResult: true)

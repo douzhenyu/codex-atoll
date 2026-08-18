@@ -129,6 +129,12 @@ enum DisclosureCategory: CaseIterable, Hashable, Sendable {
 /// no credential, account, session, database, monitor, or mutable consent
 /// dependency and offers no live enable action.
 struct PrivacyDataView: View {
+    /// The held-out UI backstop (UI-SPEC `verification: backstop`): a failed
+    /// future enable action must keep its disclosure sheet open, name the
+    /// integration, explain the failure, and leave consent off. Phase 1 records
+    /// and tests this contract without instantiating enablement.
+    static let enableFailureBackstopContract = PrivacyStrings.disclosureFailureContract
+
     // MARK: Lifecycle
 
     init(onBack: @escaping () -> Void) {
@@ -299,7 +305,7 @@ struct PrivacyDataView: View {
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.white)
                 .accessibilityAddTraits(.isHeader)
-            Text(PrivacyStrings.disclosureFailureContract)
+            Text(Self.enableFailureBackstopContract)
                 .font(.system(size: 14))
                 .foregroundColor(.white.opacity(0.8))
                 .fixedSize(horizontal: false, vertical: true)
