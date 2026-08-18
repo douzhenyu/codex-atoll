@@ -117,4 +117,78 @@ final class DesktopHandoffLauncherTests: XCTestCase {
         XCTAssertEqual(fake.openCalls.count, 1)
         XCTAssertEqual(fake.lookupCalls, ["com.openai.codex"])
     }
+
+    // MARK: - Coalescing, timeout, and retry
+
+    func testDuplicateTapDuringOpeningIssuesOneWorkspaceCall() async throws {
+        let fake = WorkspaceFake()
+        fake.lookupURL = URL(string: "file:///Applications/ChatGPT.app")
+        fake.openHandler = { _ in
+            // A request that stays in flight until cancelled.
+            try await Task.sleep(for: .seconds(30))
+            return FakeApp(activateResult: true)
+        }
+        let launcher = DesktopHandoffLauncher(workspace: fake, timeout: .seconds(5))
+
+        let first = Task { await launcher.openChatGPT() }
+        defer { first.cancel() }
+
+        // Wait until the first request is visibly `.opening`.
+        let openedDeadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while launcher.state != .opening, ContinuousClock.now < openedDeadline {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        XCTAssertEqual(launcher.state, .opening)
+
+        // A second tap while `.opening` must not issue a second workspace call.
+        let second = Task { await launcher.openChatGPT() }
+        try? await Task.sleep(for: .milliseconds(100))
+        second.cancel()
+
+        XCTAssertEqual(fake.openCalls.count, 1)
+    }
+
+    func testHangingRequestTimesOutWithInjectedDuration() async throws {
+        let fake = WorkspaceFake()
+        fake.lookupURL = URL(string: "file:///Applications/ChatGPT.app")
+        fake.openHandler = { _ in
+            try await Task.sleep(for: .seconds(30))
+            return FakeApp(activateResult: true)
+        }
+        let launcher = DesktopHandoffLauncher(workspace: fake, timeout: .milliseconds(100))
+
+        let request = Task { await launcher.openChatGPT() }
+        defer { request.cancel() }
+
+        // Bounded wait for the injected timeout; the test never sleeps for
+        // the production five-second bound.
+        let deadline = ContinuousClock.now.advanced(by: .seconds(5))
+        while launcher.state != .failed(.timedOut), ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
+        XCTAssertEqual(launcher.state, .failed(.timedOut))
+        XCTAssertEqual(fake.openCalls.count, 1)
+    }
+
+    func testRetryAfterFailureIsPermitted() async {
+        let fake = WorkspaceFake()
+        fake.lookupURL = URL(string: "file:///Applications/ChatGPT.app")
+        fake.openHandler = { _ in FakeApp(activateResult: false) }
+
+        let launcher = DesktopHandoffLauncher(workspace: fake, timeout: .seconds(5))
+        await launcher.openChatGPT()
+        XCTAssertEqual(launcher.state, .failed(.activationFailed))
+
+        // Failure leaves `.opening`; a retry is permitted and can succeed.
+        fake.openHandler = { _ in FakeApp(activateResult: true) }
+        await launcher.openChatGPT()
+
+        XCTAssertEqual(launcher.state, .idle)
+        XCTAssertEqual(fake.openCalls.count, 2)
+    }
+
+    func testProductionTimeoutIsExactlyFiveSeconds() {
+        XCTAssertEqual(DesktopHandoffLauncher.productionTimeout, .seconds(5))
+    }
 }
