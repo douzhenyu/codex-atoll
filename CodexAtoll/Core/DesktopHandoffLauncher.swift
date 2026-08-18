@@ -18,8 +18,8 @@ import Observation
 // MARK: - WorkspaceOpening
 
 /// The minimal AppKit surface the launcher depends on: registered-app lookup,
-/// open, and activation only. `SystemWorkspace` is the AppKit implementation;
-/// test doubles are the only other conformers.
+/// open, activation, and default-browser URL opening. `SystemWorkspace` is the
+/// AppKit implementation; test doubles are the only other conformers.
 @MainActor
 protocol WorkspaceOpening {
     func urlForApplication(withBundleIdentifier bundleIdentifier: String) -> URL?
@@ -28,6 +28,9 @@ protocol WorkspaceOpening {
         at url: URL,
         configuration: NSWorkspace.OpenConfiguration
     ) async throws -> any Activatable
+
+    /// Open a URL in the default browser (used for the fixed official page).
+    func open(_ url: URL) async throws
 }
 
 /// A launched application that can be asked to come to the foreground.
@@ -53,6 +56,10 @@ struct SystemWorkspace: WorkspaceOpening {
         configuration: NSWorkspace.OpenConfiguration
     ) async throws -> any Activatable {
         try await NSWorkspace.shared.openApplication(at: url, configuration: configuration)
+    }
+
+    func open(_ url: URL) async throws {
+        _ = try await NSWorkspace.shared.open(url, configuration: .init())
     }
 }
 
@@ -95,6 +102,12 @@ final class DesktopHandoffLauncher {
     /// so they never sleep the real five-second bound.
     static let productionTimeout: Duration = .seconds(5)
 
+    /// The single fixed official usage page. This is the full data boundary:
+    /// Codex Atoll only asks the default browser to open this exact compile-time
+    /// URL and never fetches, embeds, parses, caches, estimates, or retains any
+    /// page, plan, or account value from it. No user or task text is interpolated.
+    static let officialUsageURL = URL(string: "https://chatgpt.com/codex/settings/usage")!
+
     private let workspace: any WorkspaceOpening
     private let timeout: Duration
 
@@ -115,6 +128,17 @@ final class DesktopHandoffLauncher {
         guard self.state != .opening else { return }
         self.state = .opening
         let outcome = await self.runBounded()
+        self.finish(outcome)
+    }
+
+    /// Ask the default browser to open the fixed official usage page. The same
+    /// coalescing, timeout, and retry contract as `openChatGPT()`: repeated taps
+    /// issue one request, the local `Opening…` state ends within five seconds,
+    /// and failure keeps the originating detail open and retryable.
+    func openOfficialUsage() async {
+        guard self.state != .opening else { return }
+        self.state = .opening
+        let outcome = await self.runBoundedURLOpen()
         self.finish(outcome)
     }
 
@@ -165,6 +189,40 @@ final class DesktopHandoffLauncher {
             }
         }
         return .failure(.applicationUnavailable)
+    }
+
+    /// Same task-group race as `runBounded()`, but for the fixed official URL.
+    /// The workspace is asked to open exactly `officialUsageURL`; no lookup,
+    /// parsing, caching, or estimation crosses the boundary.
+    private func runBoundedURLOpen() async -> HandoffOutcome {
+        await withTaskGroup(of: HandoffOutcome.self) { group in
+            group.addTask {
+                await self.performURLOpen()
+            }
+            group.addTask {
+                do {
+                    try await Task.sleep(for: self.timeout)
+                    return HandoffOutcome.failure(.timedOut)
+                } catch {
+                    return HandoffOutcome.failure(.timedOut)
+                }
+            }
+
+            guard let first = await group.next() else {
+                return HandoffOutcome.failure(.timedOut)
+            }
+            group.cancelAll()
+            return first
+        }
+    }
+
+    private func performURLOpen() async -> HandoffOutcome {
+        do {
+            try await self.workspace.open(Self.officialUsageURL)
+            return .success
+        } catch {
+            return .failure(.launchFailed)
+        }
     }
 
     private func finish(_ outcome: HandoffOutcome) {

@@ -11,6 +11,16 @@
         }
       }
     },
+    "Back" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        }
+      }
+    },
     "ChatGPT could not be opened. Open it from Applications, then try again." : {
       "localizations" : {
         "en" : {
@@ -47,6 +57,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Codex Atoll cannot obtain current Codex runtime information. Review task details, history, approvals, and actions in ChatGPT until an official integration is available."
+          }
+        }
+      }
+    },
+    "Codex Atoll does not read account credentials or estimate your quota. View current limits on the official Codex page." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll does not read account credentials or estimate your quota. View current limits on the official Codex page."
           }
         }
       }
@@ -101,12 +121,62 @@
         }
       }
     },
+    "Open official Codex usage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open official Codex usage"
+          }
+        }
+      }
+    },
     "Opening ChatGPT…" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opening ChatGPT…"
+          }
+        }
+      }
+    },
+    "Opening official Codex usage…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening official Codex usage…"
+          }
+        }
+      }
+    },
+    "The official Codex usage page could not be opened. Check your default browser, then try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The official Codex usage page could not be opened. Check your default browser, then try again."
+          }
+        }
+      }
+    },
+    "Usage details unavailable here" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage details unavailable here"
+          }
+        }
+      }
+    },
+    "Usage unavailable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage unavailable"
           }
         }
       }

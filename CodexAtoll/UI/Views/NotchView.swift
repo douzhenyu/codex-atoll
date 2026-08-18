@@ -112,6 +112,13 @@ enum NotchStrings {
     static let openingChatGPT = String(localized: "Opening ChatGPT…")
     static let desktopHandoffError = String(localized: "ChatGPT could not be opened. Open it from Applications, then try again.")
     static let closeHint = String(localized: "Click to close")
+    static let usageUnavailable = String(localized: "Usage unavailable")
+    static let usageDetailHeading = String(localized: "Usage details unavailable here")
+    static let usageDetailBody = String(localized: "Codex Atoll does not read account credentials or estimate your quota. View current limits on the official Codex page.")
+    static let usageCTA = String(localized: "Open official Codex usage")
+    static let usageOpening = String(localized: "Opening official Codex usage…")
+    static let usageHandoffError = String(localized: "The official Codex usage page could not be opened. Check your default browser, then try again.")
+    static let back = String(localized: "Back")
 }
 
 // MARK: - NotchView
@@ -134,7 +141,7 @@ struct NotchView: View {
         VStack(spacing: 0) {
             self.notchPanel
             if self.viewModel.status == .open {
-                self.companionContent
+                self.routeContent
                     .transition(.opacity)
             }
         }
@@ -193,6 +200,18 @@ struct NotchView: View {
     // MARK: - Header pill
 
     private var notchPanel: some View {
+        Group {
+            if self.viewModel.status == .closed {
+                self.closedPill
+            } else {
+                self.expandedHeader
+            }
+        }
+        .padding(.horizontal, Self.edgeInset)
+        .frame(height: self.closedHeight)
+    }
+
+    private var closedPill: some View {
         HStack(spacing: Self.interModuleSpacing) {
             self.codexMark
                 .frame(width: Self.iconStripWidth, height: self.closedHeight)
@@ -201,30 +220,55 @@ struct NotchView: View {
             self.neutralSymbol
                 .frame(width: Self.iconStripWidth, height: self.closedHeight)
         }
-        .padding(.horizontal, Self.edgeInset)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            withAnimation(.easeOut(duration: 0.25)) {
+                self.viewModel.notchOpen()
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(NotchStrings.collapsedAccessibility)
+        .accessibilityAddTraits(.isButton)
+    }
+
+    /// The expanded header: usage affordance top-left, menu affordance
+    /// top-right (menu arrives in the next slice). Tapping the header
+    /// background closes the notch; the contained buttons consume their own taps.
+    private var expandedHeader: some View {
+        HStack(spacing: Self.interModuleSpacing) {
+            self.usageAffordance
+            Spacer(minLength: 0)
+        }
         .frame(height: self.closedHeight)
         .contentShape(Rectangle())
         .onTapGesture {
             withAnimation(.easeOut(duration: 0.25)) {
-                if self.viewModel.status == .closed {
-                    self.viewModel.notchOpen()
-                } else {
-                    self.viewModel.notchClose()
-                }
+                self.viewModel.notchClose()
             }
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(self.panelAccessibilityLabel)
-        .accessibilityHint(self.panelAccessibilityHint)
-        .accessibilityAddTraits(.isButton)
+        .accessibilityElement(children: .contain)
+        .accessibilityHint(NotchStrings.closeHint)
     }
 
-    private var panelAccessibilityLabel: String {
-        self.viewModel.status == .closed ? NotchStrings.collapsedAccessibility : NotchStrings.appName
-    }
-
-    private var panelAccessibilityHint: String {
-        self.viewModel.status == .open ? NotchStrings.closeHint : ""
+    /// Top-left `Usage unavailable` affordance. A button that navigates to the
+    /// in-notch usage detail — never a percentage, reset time, or loading state.
+    private var usageAffordance: some View {
+        Button {
+            self.viewModel.openUsageUnavailable()
+        } label: {
+            HStack(spacing: 4) {
+                Text(NotchStrings.usageUnavailable)
+                    .font(.system(size: 12))
+                    .foregroundColor(.white.opacity(0.8))
+                Image(systemName: "arrow.up.right")
+                    .font(.system(size: 10))
+                    .foregroundColor(.white.opacity(0.5))
+                    .accessibilityHidden(true)
+            }
+            .frame(height: 44)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 
     private var codexMark: some View {
@@ -243,11 +287,19 @@ struct NotchView: View {
             .accessibilityHidden(true)
     }
 
-    // MARK: - Companion route
+    // MARK: - Routes
 
-    private var companionContent: some View {
-        ScrollView(.vertical, showsIndicators: true) {
-            DesktopCompanionView()
+    @ViewBuilder
+    private var routeContent: some View {
+        switch self.viewModel.destination {
+        case .companion:
+            ScrollView(.vertical, showsIndicators: true) {
+                DesktopCompanionView()
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 12)
+            }
+        case .usageUnavailable:
+            UsageUnavailableView(onBack: { self.viewModel.goBack() })
                 .padding(.horizontal, 12)
                 .padding(.bottom, 12)
         }

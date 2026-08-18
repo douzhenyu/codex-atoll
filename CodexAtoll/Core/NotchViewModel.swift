@@ -23,10 +23,12 @@ enum NotchStatus: Equatable, Sendable {
 
 // MARK: - NotchDestination
 
-/// The single local destination. No task, account, credential, integration,
-/// or provider data is carried by the route value.
+/// The local destinations. No task, account, credential, integration, or
+/// provider data is carried by any route value — routes are pure local
+/// navigation only.
 enum NotchDestination: Equatable, Sendable {
     case companion
+    case usageUnavailable
 }
 
 // MARK: - NotchViewModel
@@ -51,8 +53,9 @@ final class NotchViewModel {
         }
     }
 
-    /// The single local route. Fixed to `.companion` in Phase 1.
-    let destination: NotchDestination = .companion
+    /// The current local route. Readable by the shell; only the model changes
+    /// it. No route carries task, account, credential, or quota data.
+    private(set) var destination: NotchDestination = .companion
 
     /// Pure geometry used by the shell and window placement.
     let geometry: NotchGeometry
@@ -85,6 +88,17 @@ final class NotchViewModel {
     /// Local close action returning to the neutral collapsed state.
     func notchClose() {
         self.status = .closed
+    }
+
+    /// Navigate to the in-notch usage-unavailable detail. The route change is
+    /// local and carries no quota or account data.
+    func openUsageUnavailable() {
+        self.destination = .usageUnavailable
+    }
+
+    /// Return to the companion route without closing the notch.
+    func goBack() {
+        self.destination = .companion
     }
 
     // MARK: Private
