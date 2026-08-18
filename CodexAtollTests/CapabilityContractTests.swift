@@ -13,6 +13,9 @@
 import XCTest
 @testable import CodexAtoll
 
+/// The app target is MainActor-isolated (`SWIFT_DEFAULT_ACTOR_ISOLATION =
+/// MainActor`), so the contract tests run on the main actor too.
+@MainActor
 final class CapabilityContractTests: XCTestCase {
     // MARK: - Shell transitions
 
