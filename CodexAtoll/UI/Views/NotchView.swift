@@ -108,6 +108,9 @@ enum NotchStrings {
     static let currentlyUnobservable = String(localized: "Currently unobservable")
     static let collapsedAccessibility = String(localized: "Codex Atoll. Codex Desktop is currently unobservable.")
     static let desktopBody = String(localized: "Codex Atoll cannot obtain current Codex runtime information. Review task details, history, approvals, and actions in ChatGPT until an official integration is available.")
+    static let openChatGPT = String(localized: "Open ChatGPT")
+    static let openingChatGPT = String(localized: "Opening ChatGPT…")
+    static let desktopHandoffError = String(localized: "ChatGPT could not be opened. Open it from Applications, then try again.")
     static let closeHint = String(localized: "Click to close")
 }
 
@@ -243,48 +246,10 @@ struct NotchView: View {
     // MARK: - Companion route
 
     private var companionContent: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(NotchStrings.desktopSource)
-                .font(.system(size: 12))
-                .foregroundColor(.white.opacity(0.6))
-
-            HStack(alignment: .center, spacing: 8) {
-                Text(NotchStrings.desktopSource)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(.white)
-                self.capabilityBadge(
-                    label: NotchStrings.currentlyUnobservable,
-                    systemImage: "eye.slash",
-                    color: Color(red: 142 / 255, green: 142 / 255, blue: 147 / 255),
-                )
-                Spacer(minLength: 0)
-            }
-
-            Text(NotchStrings.desktopBody)
-                .font(.system(size: 14))
-                .foregroundColor(.white.opacity(0.8))
-                .fixedSize(horizontal: false, vertical: true)
+        ScrollView(.vertical, showsIndicators: true) {
+            DesktopCompanionView()
+                .padding(.horizontal, 12)
+                .padding(.bottom, 12)
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(red: 28 / 255, green: 28 / 255, blue: 30 / 255))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal, 12)
-        .padding(.bottom, 12)
-    }
-
-    private func capabilityBadge(label: String, systemImage: String, color: Color) -> some View {
-        HStack(spacing: 4) {
-            Image(systemName: systemImage)
-                .font(.system(size: 12))
-                .accessibilityHidden(true)
-            Text(label)
-                .font(.system(size: 12, weight: .medium))
-        }
-        .foregroundColor(color)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .background(Color.white.opacity(0.06))
-        .clipShape(Capsule())
     }
 }

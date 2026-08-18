@@ -1,6 +1,26 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Available" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available"
+          }
+        }
+      }
+    },
+    "ChatGPT could not be opened. Open it from Applications, then try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ChatGPT could not be opened. Open it from Applications, then try again."
+          }
+        }
+      }
+    },
     "Click to close" : {
       "localizations" : {
         "en" : {
@@ -57,6 +77,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Currently unobservable"
+          }
+        }
+      }
+    },
+    "Jump only" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jump only"
+          }
+        }
+      }
+    },
+    "Open ChatGPT" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open ChatGPT"
+          }
+        }
+      }
+    },
+    "Opening ChatGPT…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening ChatGPT…"
           }
         }
       }
