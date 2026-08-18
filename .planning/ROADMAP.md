@@ -13,7 +13,7 @@ Codex Atoll becomes a trustworthy macOS attention companion in six vertical MVP 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Honest Desktop Companion** - A source-labelled Desktop handoff and official usage entry point with transparent privacy boundaries.
+- [x] **Phase 1: Honest Desktop Companion** - A source-labelled Desktop handoff and official usage entry point with transparent privacy boundaries. (completed 2026-08-18)
 - [ ] **Phase 2: Trusted CLI Monitoring** - Consent-based, authenticated CLI monitoring with live state, activity, notifications, and diagnostics.
 - [ ] **Phase 3: Safe CLI Actions** - Verified terminal return and request-scoped approval decisions with native fallback.
 - [ ] **Phase 4: Atoll-Owned Sessions** - Opt-in App Server sessions provide structured history, supported controls, and authoritative limits.
@@ -145,7 +145,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Honest Desktop Companion | 5/5 | In Progress|  |
+| 1. Honest Desktop Companion | 5/5 | Complete    | 2026-08-18 |
 | 2. Trusted CLI Monitoring | 0/TBD | Not started | - |
 | 3. Safe CLI Actions | 0/TBD | Not started | - |
 | 4. Atoll-Owned Sessions | 0/TBD | Not started | - |

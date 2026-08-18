@@ -14,7 +14,10 @@ Codex users can notice and handle tasks that need attention without interrupting
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Users can see a source-labelled Codex Desktop entry whose unavailable capabilities are explicit — Phase 1
+- ✓ Users can activate ChatGPT Desktop through a fixed native handoff without a task-focus claim — Phase 1
+- ✓ Users can open the official Codex usage page without Codex Atoll reading credentials or quota data — Phase 1
+- ✓ Users can review the complete pre-enable data boundary and credential exclusions — Phase 1
 
 ### Active
 
@@ -24,7 +27,6 @@ Codex users can notice and handle tasks that need attention without interrupting
 - [ ] Users can inspect conversation messages, tool calls, and tool results when Codex exposes them.
 - [ ] Users can approve or deny tool execution directly when a stable, safe integration exists.
 - [ ] Users get a clear one-click fallback to the originating session when direct approval is unavailable.
-- [ ] Users can inspect available Codex usage or quota information.
 - [ ] Users can install a public release from a DMG with onboarding, update support, and basic documentation.
 
 ### Out of Scope
@@ -55,11 +57,14 @@ Codex users can notice and handle tasks that need attention without interrupting
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Fork and adapt Claude Atoll rather than reimplementing it | The reference already solves the macOS notch, windowing, state, and release problems | — Pending |
+| Fork and adapt Claude Atoll rather than reimplementing it | The reference already solves the macOS notch, windowing, state, and release problems | ✓ Phase 1 preserved Apache attribution and selectively reused the native shell without inherited services |
 | Support Codex CLI and Codex Desktop from the first public release | The product should provide one attention surface across both primary Codex workflows | — Pending |
 | Include status, navigation, history, approvals, and usage in v1 | A notification-only clone would not deliver the requested complete companion experience | — Pending |
-| Gracefully fall back to focusing the original session when direct approval is unavailable | Stable and safe integrations matter more than simulated feature parity | — Pending |
+| Gracefully fall back to focusing the original session when direct approval is unavailable | Stable and safe integrations matter more than simulated feature parity | ✓ Phase 1 validated the activation-only Desktop fallback |
 | Target a public release rather than a source-only prototype | Installability, onboarding, updates, and documentation are part of the requested definition of done | — Pending |
+| Treat Codex Desktop as currently unobservable until a public interface exists | App presence cannot prove task state, history, control, or approval capability | ✓ Phase 1 ships one honest source-labelled card with no inferred lifecycle |
+| Keep usage outside the app until an authoritative provider exists | Scraping account pages or credentials would create fragile privacy risk | ✓ Phase 1 opens only the fixed official usage URL |
+| Keep all integrations disabled while presenting the future data boundary | Users should understand prompt, tool, result, session, location, and retention handling before consent | ✓ Phase 1 ships an always-accessible static disclosure |
 
 ## Evolution
 
@@ -79,4 +84,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-17 after initialization*
+*Last updated: 2026-08-18 after Phase 1*
