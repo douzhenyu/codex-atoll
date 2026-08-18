@@ -1,7 +1,66 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-
+    "Click to close" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Click to close"
+          }
+        }
+      }
+    },
+    "Codex Atoll" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll"
+          }
+        }
+      }
+    },
+    "Codex Atoll cannot obtain current Codex runtime information. Review task details, history, approvals, and actions in ChatGPT until an official integration is available." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll cannot obtain current Codex runtime information. Review task details, history, approvals, and actions in ChatGPT until an official integration is available."
+          }
+        }
+      }
+    },
+    "Codex Atoll. Codex Desktop is currently unobservable." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Atoll. Codex Desktop is currently unobservable."
+          }
+        }
+      }
+    },
+    "Codex Desktop" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Codex Desktop"
+          }
+        }
+      }
+    },
+    "Currently unobservable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currently unobservable"
+          }
+        }
+      }
+    }
   },
   "version" : "1.0"
 }

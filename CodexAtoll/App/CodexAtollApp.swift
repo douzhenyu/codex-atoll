@@ -4,15 +4,17 @@
 //
 //  Native application entry for the Codex Atoll notch and menu-bar companion.
 //
-//  Phase 1 bootstrap: exposes only an empty Settings scene so no ordinary
-//  SwiftUI app window is created. Plan 02 adds @NSApplicationDelegateAdaptor
-//  together with AppDelegate and the accessory NSPanel lifecycle.
+//  The app is a window-only accessory shell: the @main entry attaches
+//  AppDelegate, which owns the native notch panel. No ordinary SwiftUI
+//  window is created; the Settings scene stays empty.
 //
 
 import SwiftUI
 
 @main
 struct CodexAtollApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
         Settings {
             EmptyView()
