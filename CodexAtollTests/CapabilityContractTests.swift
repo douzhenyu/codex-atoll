@@ -195,12 +195,15 @@ final class CapabilityContractTests: XCTestCase {
 
     func testMenuDescriptorsMatchUISpecContract() {
         let items = NotchMenuView.items
-        XCTAssertEqual(items.count, 4)
+        XCTAssertEqual(items.count, 5)
         XCTAssertEqual(
             items.map(\.label),
-            ["Open ChatGPT", "Open official Codex usage", "Back", "Quit Codex Atoll"],
+            ["Open ChatGPT", "Open official Codex usage", "Privacy & Data", "Back", "Quit Codex Atoll"],
         )
-        XCTAssertEqual(items.map(\.action), [.openChatGPT, .openOfficialUsage, .back, .quit])
+        XCTAssertEqual(
+            items.map(\.action),
+            [.openChatGPT, .openOfficialUsage, .privacyData, .back, .quit],
+        )
     }
 
     func testMenuRouteTogglesToMenuAndBack() {
@@ -218,9 +221,9 @@ final class CapabilityContractTests: XCTestCase {
     func testLocalDestinationsCarryNoQuotaOrAccountData() {
         // The route enum is payload-free by construction (no associated values);
         // this proves the full Phase 1 local destination set and that no route
-        // can carry quota, history, or account data.
+        // can carry quota, history, account, credential, or integration data.
         let destinations = Set(NotchDestination.allCases.map { "\($0)" })
-        XCTAssertEqual(destinations, Set(["companion", "usageUnavailable", "menu"]))
+        XCTAssertEqual(destinations, Set(["companion", "usageUnavailable", "menu", "privacyData"]))
     }
 
     func testNoBareWorkspaceCallsInSwiftUIViews() throws {
@@ -239,6 +242,147 @@ final class CapabilityContractTests: XCTestCase {
                 offenders.isEmpty,
                 "Bare '\(token)' found in SwiftUI view source \(offenders.map(\.url.lastPathComponent))",
             )
+        }
+    }
+
+    // MARK: - Privacy & Data contract
+
+    func testPrivacyRouteRoundTripIsLocalAndKeepsNotchOpen() {
+        let model = NotchViewModel(geometry: Self.testGeometry)
+
+        model.notchOpen()
+        model.openPrivacyData()
+        XCTAssertEqual(model.destination, .privacyData)
+
+        model.goBack()
+        XCTAssertEqual(model.destination, .companion)
+        XCTAssertEqual(
+            model.status,
+            .open,
+            "Back from Privacy & Data must return to the companion without closing the notch",
+        )
+    }
+
+    func testFirstLaunchHasNoPrivacyModal() {
+        // D-12/D-15: no generic privacy modal blocks first launch; the
+        // always-accessible Privacy & Data page is reached through menu
+        // navigation only.
+        let model = NotchViewModel(geometry: Self.testGeometry)
+        XCTAssertEqual(model.status, .closed)
+        XCTAssertEqual(model.destination, .companion)
+    }
+
+    func testPrivacyMenuRowIsAlwaysReachable() {
+        let privacyItem = NotchMenuView.items.first { $0.action == .privacyData }
+        XCTAssertNotNil(privacyItem, "The expanded menu must always contain a Privacy & Data row")
+        XCTAssertEqual(privacyItem?.label, "Privacy & Data")
+    }
+
+    func testDisclosureCategoriesMatchExactOrder() {
+        // D-13: disclosure order is stable — integration identity, prompt text,
+        // tool calls/results, session/status metadata, processing location, then
+        // retention. Enable/not-now actions appear only when an integration is
+        // present, which Phase 1 never instantiates.
+        XCTAssertEqual(
+            DisclosureCategory.allCases,
+            [
+                .integrationIdentity,
+                .promptText,
+                .toolCallsResults,
+                .sessionStatusMetadata,
+                .processingLocation,
+                .retention,
+            ],
+        )
+    }
+
+    func testEveryDataRowHasOwnProcessingLocationAndRetention() {
+        // D-13: prompt text, tool calls/results, and session/status metadata are
+        // separate disclosure rows; a merged generic data row fails this test.
+        let rows = DisclosureCategory.dataCategories
+        XCTAssertEqual(rows.map(\.title), ["Prompt text", "Tool calls and results", "Session/status metadata"])
+        for row in rows {
+            XCTAssertFalse(row.location.isEmpty, "\(row.title) must state where it is processed")
+            XCTAssertFalse(row.retention.isEmpty, "\(row.title) must state how long it is retained")
+        }
+        // Distinct titles guarantee the three data rows are never merged.
+        XCTAssertEqual(Set(rows.map(\.title)).count, rows.count)
+    }
+
+    func testPrivacyEmptyStateAndCopyMatchUISpecContract() {
+        XCTAssertEqual(PrivacyStrings.title, "Privacy & Data")
+        XCTAssertEqual(PrivacyStrings.emptyState, "No integrations are enabled")
+        XCTAssertEqual(
+            PrivacyStrings.emptyBody,
+            "Codex Atoll is not monitoring Codex. Before an integration is enabled, you can review exactly what data it may process.",
+        )
+    }
+
+    func testPrivacyControlStatesDefaultOffIndependentRevocableAndClearing() {
+        // D-14: integrations start off, are authorized independently, are
+        // revocable, and are paired with clearing of Codex Atoll-owned data.
+        let control = PrivacyStrings.controlBody
+        XCTAssertTrue(control.contains("off by default"), "Control copy must state integrations start off")
+        XCTAssertTrue(control.contains("independently"), "Control copy must state independent authorization")
+        XCTAssertTrue(control.contains("revoke"), "Control copy must state revocation")
+        XCTAssertTrue(control.contains("clear Codex Atoll-owned local data"), "Control copy must state local-data clearing")
+    }
+
+    func testCredentialAssuranceNamesEveryLiteralExclusion() {
+        // D-16/PRIV-05: the assurance literally names Codex OAuth token, session
+        // cookie, and Keychain credential, plus separate exclusions for private
+        // Desktop databases and UI-scraped task data.
+        XCTAssertEqual(
+            PrivacyStrings.credentialAssurance,
+            "Codex Atoll never asks for your Codex OAuth token, session cookie, or Keychain credential.",
+        )
+        XCTAssertEqual(
+            PrivacyStrings.exclusionDesktopDatabase,
+            "Codex Atoll does not read ChatGPT or Codex Desktop private databases.",
+        )
+        XCTAssertEqual(
+            PrivacyStrings.exclusionScrapedTaskData,
+            "Codex Atoll does not read UI-scraped task data.",
+        )
+    }
+
+    func testLocalizationCatalogContainsPrivacyContract() throws {
+        let catalog = try Self.localizationCatalogText()
+        let requiredKeys = [
+            "Privacy & Data",
+            "No integrations are enabled",
+            "Codex Atoll is not monitoring Codex. Before an integration is enabled, you can review exactly what data it may process.",
+            "Codex Atoll never asks for your Codex OAuth token, session cookie, or Keychain credential.",
+        ]
+        for key in requiredKeys {
+            XCTAssertTrue(catalog.contains(key), "Localization catalog is missing privacy contract key: \(key)")
+        }
+    }
+
+    func testPrivacyTemplateDoesNotClaimConsentOrEnabledIntegration() {
+        // The static pre-enable template must never present itself as consent
+        // already granted or as an enabled integration (D-14/D-15 prohibition).
+        let strings = [
+            PrivacyStrings.emptyState,
+            PrivacyStrings.emptyBody,
+            PrivacyStrings.controlBody,
+            PrivacyStrings.credentialAssurance,
+        ]
+        for text in strings {
+            XCTAssertFalse(text.contains("consent granted"))
+            XCTAssertFalse(text.contains("is currently enabled"))
+        }
+    }
+
+    func testPrivacyCategoryAccessibilityLabelsRetainCompleteContent() {
+        // Full VoiceOver copy: every disclosure row's combined label keeps the
+        // complete category, processing-location, and retention text.
+        for category in DisclosureCategory.allCases {
+            let label = PrivacyDataView.categoryAccessibilityLabel(for: category)
+            XCTAssertTrue(label.contains(category.title), "Missing title in label for \(category.title)")
+            XCTAssertTrue(label.contains(category.body), "Missing body in label for \(category.title)")
+            XCTAssertTrue(label.contains(category.location), "Missing location in label for \(category.title)")
+            XCTAssertTrue(label.contains(category.retention), "Missing retention in label for \(category.title)")
         }
     }
 
@@ -309,5 +453,23 @@ final class CapabilityContractTests: XCTestCase {
             result.append((url, text))
         }
         return result
+    }
+
+    /// Read the localization catalog so the tests can prove the required
+    /// privacy copy is registered in Localizable.xcstrings (not only present as
+    /// a Swift `String(localized:)` default).
+    private static func localizationCatalogText() throws -> String {
+        let testFileURL = URL(fileURLWithPath: #filePath).standardizedFileURL
+        let testsDir = testFileURL.deletingLastPathComponent() // .../CodexAtollTests
+        let repoRoot = testsDir.deletingLastPathComponent()    // repository root
+        let catalogURL = repoRoot
+            .appendingPathComponent("CodexAtoll")
+            .appendingPathComponent("Resources")
+            .appendingPathComponent("Localizable.xcstrings")
+
+        guard FileManager.default.fileExists(atPath: catalogURL.path) else {
+            throw XCTSkip("Localization catalog not found at \(catalogURL.path)")
+        }
+        return try String(contentsOf: catalogURL, encoding: .utf8)
     }
 }
