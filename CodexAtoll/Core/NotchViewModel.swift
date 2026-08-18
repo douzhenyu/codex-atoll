@@ -26,9 +26,10 @@ enum NotchStatus: Equatable, Sendable {
 /// The local destinations. No task, account, credential, integration, or
 /// provider data is carried by any route value — routes are pure local
 /// navigation only.
-enum NotchDestination: Equatable, Sendable {
+enum NotchDestination: CaseIterable, Equatable, Sendable {
     case companion
     case usageUnavailable
+    case menu
 }
 
 // MARK: - NotchViewModel
@@ -94,6 +95,11 @@ final class NotchViewModel {
     /// local and carries no quota or account data.
     func openUsageUnavailable() {
         self.destination = .usageUnavailable
+    }
+
+    /// Navigate to the local navigation/actions menu.
+    func openMenu() {
+        self.destination = .menu
     }
 
     /// Return to the companion route without closing the notch.

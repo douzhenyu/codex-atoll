@@ -121,6 +121,16 @@
         }
       }
     },
+    "Open Codex Atoll menu" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Codex Atoll menu"
+          }
+        }
+      }
+    },
     "Open official Codex usage" : {
       "localizations" : {
         "en" : {
@@ -147,6 +157,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Opening official Codex usage…"
+          }
+        }
+      }
+    },
+    "Quit Codex Atoll" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quit Codex Atoll"
           }
         }
       }

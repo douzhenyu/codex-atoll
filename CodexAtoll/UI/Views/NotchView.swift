@@ -10,6 +10,7 @@
 //  approval badge, task list, or inferred Desktop lifecycle state is rendered.
 //
 
+import AppKit
 import SwiftUI
 
 // MARK: - NotchShape
@@ -119,6 +120,8 @@ enum NotchStrings {
     static let usageOpening = String(localized: "Opening official Codex usage…")
     static let usageHandoffError = String(localized: "The official Codex usage page could not be opened. Check your default browser, then try again.")
     static let back = String(localized: "Back")
+    static let openMenu = String(localized: "Open Codex Atoll menu")
+    static let quit = String(localized: "Quit Codex Atoll")
 }
 
 // MARK: - NotchView
@@ -232,12 +235,13 @@ struct NotchView: View {
     }
 
     /// The expanded header: usage affordance top-left, menu affordance
-    /// top-right (menu arrives in the next slice). Tapping the header
-    /// background closes the notch; the contained buttons consume their own taps.
+    /// top-right. Tapping the header background closes the notch; the
+    /// contained buttons consume their own taps.
     private var expandedHeader: some View {
         HStack(spacing: Self.interModuleSpacing) {
             self.usageAffordance
             Spacer(minLength: 0)
+            self.menuButton
         }
         .frame(height: self.closedHeight)
         .contentShape(Rectangle())
@@ -271,6 +275,30 @@ struct NotchView: View {
         .buttonStyle(.plain)
     }
 
+    /// Top-right icon-only menu control. Announceable as `Open Codex Atoll
+    /// menu` with a 44x44 hit target; toggles the local menu route.
+    private var menuButton: some View {
+        Button {
+            self.toggleMenu()
+        } label: {
+            Image(systemName: self.viewModel.destination == .menu ? "xmark" : "line.3.horizontal")
+                .font(.system(size: 14, weight: .medium))
+                .foregroundColor(.white.opacity(0.6))
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(NotchStrings.openMenu)
+    }
+
+    private func toggleMenu() {
+        if self.viewModel.destination == .menu {
+            self.viewModel.goBack()
+        } else {
+            self.viewModel.openMenu()
+        }
+    }
+
     private var codexMark: some View {
         Image(.codexMark)
             .resizable()
@@ -302,6 +330,13 @@ struct NotchView: View {
             UsageUnavailableView(onBack: { self.viewModel.goBack() })
                 .padding(.horizontal, 12)
                 .padding(.bottom, 12)
+        case .menu:
+            NotchMenuView(
+                onBack: { self.viewModel.goBack() },
+                onQuit: { NSApplication.shared.terminate(nil) },
+            )
+            .padding(.horizontal, 12)
+            .padding(.bottom, 12)
         }
     }
 }
