@@ -22,8 +22,10 @@ import XCTest
 private final class WorkspaceFake: WorkspaceOpening {
     var lookupURL: URL?
     var openHandler: ((URL) async throws -> any Activatable)?
+    var openURLHandler: ((URL) async throws -> Void)?
     private(set) var lookupCalls: [String] = []
     private(set) var openCalls: [URL] = []
+    private(set) var openURLCalls: [URL] = []
 
     func urlForApplication(withBundleIdentifier bundleIdentifier: String) -> URL? {
         self.lookupCalls.append(bundleIdentifier)
@@ -39,6 +41,14 @@ private final class WorkspaceFake: WorkspaceOpening {
             throw WorkspaceFakeError.missingHandler
         }
         return try await openHandler(url)
+    }
+
+    func open(_ url: URL) async throws {
+        self.openURLCalls.append(url)
+        guard let openURLHandler else {
+            throw WorkspaceFakeError.missingHandler
+        }
+        try await openURLHandler(url)
     }
 }
 
@@ -190,5 +200,94 @@ final class DesktopHandoffLauncherTests: XCTestCase {
 
     func testProductionTimeoutIsExactlyFiveSeconds() {
         XCTAssertEqual(DesktopHandoffLauncher.productionTimeout, .seconds(5))
+    }
+
+    // MARK: - Official usage handoff
+
+    func testOfficialUsageURLIsExactlyTheFixedOfficialPage() {
+        XCTAssertEqual(
+            DesktopHandoffLauncher.officialUsageURL.absoluteString,
+            "https://chatgpt.com/codex/settings/usage",
+        )
+    }
+
+    func testOpenOfficialUsageIssuesExactlyOneURLOpen() async {
+        let fake = WorkspaceFake()
+        fake.openURLHandler = { _ in }
+
+        let launcher = DesktopHandoffLauncher(workspace: fake)
+        await launcher.openOfficialUsage()
+
+        XCTAssertEqual(launcher.state, .idle)
+        XCTAssertEqual(fake.openURLCalls, [DesktopHandoffLauncher.officialUsageURL])
+    }
+
+    func testOpenOfficialUsageURLErrorMapsToLaunchFailed() async {
+        let fake = WorkspaceFake()
+        fake.openURLHandler = { _ in throw WorkspaceFakeError.missingHandler }
+
+        let launcher = DesktopHandoffLauncher(workspace: fake)
+        await launcher.openOfficialUsage()
+
+        XCTAssertEqual(launcher.state, .failed(.launchFailed))
+        XCTAssertEqual(fake.openURLCalls.count, 1)
+    }
+
+    func testOpenOfficialUsageCoalescesConcurrentTaps() async throws {
+        let fake = WorkspaceFake()
+        fake.openURLHandler = { _ in
+            try await Task.sleep(for: .seconds(30))
+        }
+        let launcher = DesktopHandoffLauncher(workspace: fake, timeout: .seconds(5))
+
+        let first = Task { await launcher.openOfficialUsage() }
+        defer { first.cancel() }
+
+        let openedDeadline = ContinuousClock.now.advanced(by: .seconds(2))
+        while launcher.state != .opening, ContinuousClock.now < openedDeadline {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        XCTAssertEqual(launcher.state, .opening)
+
+        // A second tap while `.opening` must not issue a second URL open.
+        let second = Task { await launcher.openOfficialUsage() }
+        try? await Task.sleep(for: .milliseconds(100))
+        second.cancel()
+
+        XCTAssertEqual(fake.openURLCalls.count, 1)
+    }
+
+    func testOpenOfficialUsageTimesOutWithInjectedDuration() async throws {
+        let fake = WorkspaceFake()
+        fake.openURLHandler = { _ in
+            try await Task.sleep(for: .seconds(30))
+        }
+        let launcher = DesktopHandoffLauncher(workspace: fake, timeout: .milliseconds(100))
+
+        let request = Task { await launcher.openOfficialUsage() }
+        defer { request.cancel() }
+
+        let deadline = ContinuousClock.now.advanced(by: .seconds(5))
+        while launcher.state != .failed(.timedOut), ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
+        XCTAssertEqual(launcher.state, .failed(.timedOut))
+        XCTAssertEqual(fake.openURLCalls.count, 1)
+    }
+
+    func testOpenOfficialUsageRetryAfterFailureIsPermitted() async {
+        let fake = WorkspaceFake()
+        fake.openURLHandler = { _ in throw WorkspaceFakeError.missingHandler }
+
+        let launcher = DesktopHandoffLauncher(workspace: fake, timeout: .seconds(5))
+        await launcher.openOfficialUsage()
+        XCTAssertEqual(launcher.state, .failed(.launchFailed))
+
+        fake.openURLHandler = { _ in }
+        await launcher.openOfficialUsage()
+
+        XCTAssertEqual(launcher.state, .idle)
+        XCTAssertEqual(fake.openURLCalls.count, 2)
     }
 }

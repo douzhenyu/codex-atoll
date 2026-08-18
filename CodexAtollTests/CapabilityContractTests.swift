@@ -125,6 +125,67 @@ final class CapabilityContractTests: XCTestCase {
         )
     }
 
+    // MARK: - Usage unavailable contract
+
+    func testUsageUnavailableCopyMatchesUISpecContract() {
+        XCTAssertEqual(NotchStrings.usageUnavailable, "Usage unavailable")
+        XCTAssertEqual(NotchStrings.usageDetailHeading, "Usage details unavailable here")
+        XCTAssertEqual(
+            NotchStrings.usageDetailBody,
+            "Codex Atoll does not read account credentials or estimate your quota. View current limits on the official Codex page.",
+        )
+        XCTAssertEqual(NotchStrings.usageCTA, "Open official Codex usage")
+        XCTAssertEqual(NotchStrings.usageOpening, "Opening official Codex usage…")
+        XCTAssertEqual(
+            NotchStrings.usageHandoffError,
+            "The official Codex usage page could not be opened. Check your default browser, then try again.",
+        )
+        XCTAssertEqual(NotchStrings.back, "Back")
+    }
+
+    func testUsageDetailRouteRoundTripIsLocalAndKeepsNotchOpen() {
+        let model = NotchViewModel(geometry: Self.testGeometry)
+
+        model.notchOpen()
+        model.openUsageUnavailable()
+        XCTAssertEqual(model.destination, .usageUnavailable)
+
+        model.goBack()
+        XCTAssertEqual(model.destination, .companion)
+        XCTAssertEqual(model.status, .open, "Back must return to the companion without closing the notch")
+    }
+
+    func testUsageSurfaceCopyHasNoQuotaOrLoadingPresentation() {
+        let usageStrings = [
+            NotchStrings.usageUnavailable,
+            NotchStrings.usageDetailHeading,
+            NotchStrings.usageDetailBody,
+            NotchStrings.usageCTA,
+            NotchStrings.usageOpening,
+            NotchStrings.usageHandoffError,
+        ]
+        let forbiddenFragments = ["%", "reset", "Remaining", "heatmap", "chart", "skeleton", "progress"]
+        for text in usageStrings {
+            for fragment in forbiddenFragments {
+                XCTAssertFalse(
+                    text.localizedCaseInsensitiveContains(fragment),
+                    "Usage copy must not present quota or loading data: '\(text)' contains '\(fragment)'",
+                )
+            }
+        }
+    }
+
+    func testUsageCtaTitleBindsOnlyToTransientOpeningText() {
+        // Only the local action result may show transient `Opening…`; the
+        // idle/error/retry surface keeps the exact action label.
+        XCTAssertEqual(UsageUnavailableView.ctaTitle(for: .opening), "Opening official Codex usage…")
+        XCTAssertEqual(UsageUnavailableView.ctaTitle(for: .idle), "Open official Codex usage")
+        XCTAssertEqual(
+            UsageUnavailableView.ctaTitle(for: .failed(.timedOut)),
+            "Open official Codex usage",
+        )
+    }
+
     // MARK: - Forbidden production inventory
 
     func testProductionInventoryRejectsInheritedServicesAndPersistence() throws {
