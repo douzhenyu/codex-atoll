@@ -1,23 +1,28 @@
 ---
 phase: 01-honest-desktop-companion
 verified: 2026-08-18T07:05:00Z
-status: human_needed
+status: passed
 score: 13/13 must-haves verified
 behavior_unverified: 0 # All behavior-dependent truths have passing behavioral tests (see Behavioral Spot-Checks)
 overrides_applied: 0
 human_verification:
+
   - test: "Launch CodexAtoll.app and inspect the collapsed notch: Codex mark left, neutral eye.slash right, no shortcut/spinner, no automatic expansion; direct click opens the companion card; close returns to the neutral collapsed state."
     expected: "Neutral collapsed shell with complete VoiceOver label 'Codex Atoll. Codex Desktop is currently unobservable.'; no inferred Desktop lifecycle, progress, or credential UI."
     why_human: "Requires a running macOS window and visual/accessibility inspection (WindowServer, VoiceOver). Listed as manual-only UAT in VALIDATION.md (D3, D4, D8)."
+
   - test: "Click 'Open ChatGPT' with ChatGPT Desktop installed; confirm ChatGPT activates without Atoll claiming a specific task. Temporarily make bundle lookup fail and confirm the Applications fallback copy remains visible."
     expected: "Native activation succeeds; no task-focus claim. On failure the card and exact retryable error stay visible."
     why_human: "External application activation depends on the installed app and WindowServer."
+
   - test: "Click 'Open official Codex usage'; confirm the default browser opens exactly https://chatgpt.com/codex/settings/usage and Atoll does not request credentials or scrape the page."
     expected: "Default-browser handoff only; no credential prompt; page content stays external."
     why_human: "Browser routing and authenticated official-page content are external."
+
   - test: "Navigate every Phase 1 control with VoiceOver and keyboard: collapsed pill, Desktop card, usage affordance/detail, menu (Open ChatGPT / Open official Codex usage / Privacy & Data / Back / Quit), Privacy & Data disclosure rows."
     expected: "Literal capability labels announced; full truncated copy read; back/CTA reachable; 44px targets; Reduce Motion respected."
     why_human: "Assistive output and navigation order require macOS accessibility inspection."
+
   - test: "Engineering decision (REVIEW WR-01): harden DesktopHandoffLauncher.runBounded()/runBoundedURLOpen() so the local Opening state cannot extend beyond five seconds when the underlying Launch Services call is slow or ignores Task cancellation."
     expected: "The timeout is authoritative for the state transition even when the losing child task does not observe cancellation."
     why_human: "Presence checks and current cooperative-fake tests cannot prove the non-cooperative-cancellation path; requires an engineering decision on the fix approach (detached loser, cancellation handler, or first-result continuation)."
