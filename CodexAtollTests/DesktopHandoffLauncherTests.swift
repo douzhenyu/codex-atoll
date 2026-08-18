@@ -202,6 +202,37 @@ final class DesktopHandoffLauncherTests: XCTestCase {
         XCTAssertEqual(DesktopHandoffLauncher.productionTimeout, .seconds(5))
     }
 
+    func testAppAndURLOpeningBothSettleWithinInjectedTimeout() async throws {
+        // Phase-wide: every app/URL in-flight state coalesces and ends within
+        // the injected bound, for both the ChatGPT activation and the official
+        // usage handoff. Neither path may leave a surface stuck `.opening`.
+        let fake = WorkspaceFake()
+        fake.openHandler = { _ in
+            try await Task.sleep(for: .seconds(30))
+            return FakeApp(activateResult: true)
+        }
+        fake.openURLHandler = { _ in
+            try await Task.sleep(for: .seconds(30))
+        }
+        let launcher = DesktopHandoffLauncher(workspace: fake, timeout: .milliseconds(100))
+
+        let appTask = Task { await launcher.openChatGPT() }
+        defer { appTask.cancel() }
+        let appDeadline = ContinuousClock.now.advanced(by: .seconds(5))
+        while launcher.state != .failed(.timedOut), ContinuousClock.now < appDeadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertEqual(launcher.state, .failed(.timedOut), "App handoff must settle within the injected bound")
+
+        let urlTask = Task { await launcher.openOfficialUsage() }
+        defer { urlTask.cancel() }
+        let urlDeadline = ContinuousClock.now.advanced(by: .seconds(5))
+        while launcher.state != .failed(.timedOut), ContinuousClock.now < urlDeadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertEqual(launcher.state, .failed(.timedOut), "URL handoff must settle within the injected bound")
+    }
+
     // MARK: - Official usage handoff
 
     func testOfficialUsageURLIsExactlyTheFixedOfficialPage() {

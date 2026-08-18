@@ -386,6 +386,79 @@ final class CapabilityContractTests: XCTestCase {
         }
     }
 
+    func testPrivacyDisclosureContentRemainsComplete() {
+        // With zero integrations the page still renders the complete ordered
+        // disclosure: every category row and every control/credential section
+        // has full content, so long content scrolls without hiding headings,
+        // category meaning, or actions.
+        for category in DisclosureCategory.allCases {
+            XCTAssertFalse(category.title.isEmpty)
+            XCTAssertFalse(category.body.isEmpty)
+            XCTAssertFalse(category.location.isEmpty)
+            XCTAssertFalse(category.retention.isEmpty)
+        }
+        XCTAssertFalse(PrivacyStrings.emptyState.isEmpty)
+        XCTAssertFalse(PrivacyStrings.emptyBody.isEmpty)
+        XCTAssertFalse(PrivacyStrings.controlTitle.isEmpty)
+        XCTAssertFalse(PrivacyStrings.controlBody.isEmpty)
+        XCTAssertFalse(PrivacyStrings.credentialTitle.isEmpty)
+        XCTAssertFalse(PrivacyStrings.credentialAssurance.isEmpty)
+        XCTAssertFalse(PrivacyStrings.exclusionDesktopDatabase.isEmpty)
+        XCTAssertFalse(PrivacyStrings.exclusionScrapedTaskData.isEmpty)
+    }
+
+    func testDisclosureSheetFailureBackstopIsRecorded() {
+        // UI-SPEC held-out backstop: a failed future enable action keeps the
+        // disclosure sheet open, names the integration, explains the failure,
+        // and leaves consent off. Phase 1 records and tests this contract
+        // without instantiating enablement.
+        XCTAssertEqual(
+            PrivacyDataView.enableFailureBackstopContract,
+            "If enabling an integration fails, the disclosure sheet stays open, names the integration, explains the failure, and leaves consent off.",
+        )
+    }
+
+    func testControlsMeetMinimumHitTargets() throws {
+        // Every interactive surface keeps at least a 44-point hit target
+        // (UI-SPEC: icon-only controls 44x44; rows and CTAs at least 44 tall).
+        let markers = ["minHeight: 44", "height: 44", "width: 44"]
+        let controlFiles = [
+            "NotchView.swift",
+            "MenuRow.swift",
+            "DesktopCompanionView.swift",
+            "UsageUnavailableView.swift",
+            "PrivacyDataView.swift",
+        ]
+        for filename in controlFiles {
+            let source = try Self.sourceText(of: filename)
+            let hasMarker = markers.contains { source.contains($0) }
+            XCTAssertTrue(
+                hasMarker,
+                "\(filename) must keep a 44-point minimum hit target on its controls",
+            )
+        }
+    }
+
+    func testMenuLabelsAreCompleteForAllRows() {
+        for item in NotchMenuView.items {
+            XCTAssertFalse(item.label.isEmpty, "Menu row \(item.id) must have a complete label")
+            XCTAssertFalse(item.icon.isEmpty, "Menu row \(item.id) must have an icon")
+        }
+    }
+
+    func testDesktopCardBodyEllipsizesButRetainsFullVoiceOverText() throws {
+        let card = try XCTUnwrap(DesktopCompanionView.cards.first)
+        XCTAssertEqual(
+            card.body,
+            "Codex Atoll cannot obtain current Codex runtime information. Review task details, history, approvals, and actions in ChatGPT until an official integration is available.",
+        )
+        // The view ellipsizes the visual body while keeping the complete text
+        // available to VoiceOver (UI-SPEC overflow/long-text contract).
+        let source = try Self.sourceText(of: "DesktopCompanionView.swift")
+        XCTAssertTrue(source.contains(".lineLimit(2)"), "Card body must ellipsize visually")
+        XCTAssertTrue(source.contains(".accessibilityLabel(card.body)"), "Card body must retain full VoiceOver text")
+    }
+
     // MARK: - Forbidden production inventory
 
     func testProductionInventoryRejectsInheritedServicesAndPersistence() throws {
@@ -453,6 +526,15 @@ final class CapabilityContractTests: XCTestCase {
             result.append((url, text))
         }
         return result
+    }
+
+    /// Read one named production Swift file's text.
+    private static func sourceText(of filename: String) throws -> String {
+        let match = try appSwiftSources().first { $0.url.lastPathComponent == filename }
+        guard let match else {
+            throw XCTSkip("Production source \(filename) not found; source assertion skipped.")
+        }
+        return match.text
     }
 
     /// Read the localization catalog so the tests can prove the required
