@@ -5,15 +5,15 @@ milestone_name: milestone
 current_phase: 01
 current_phase_name: Honest Desktop Companion
 status: executing
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-08-18T06:07:29.098Z"
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-08-18T06:20:15.346Z"
 last_activity: 2026-08-18
 last_activity_desc: Phase 01 execution started
 progress:
   total_phases: 1
   completed_phases: 0
   total_plans: 5
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-08-17)
 ## Current Position
 
 Phase: 01 (Honest Desktop Companion) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-08-18 — Phase 01 execution started
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Progress: [██████░░░░] 60%
 | Phase 01-honest-desktop-companion P01 | 40 | 2 tasks | 11 files |
 | Phase 01-honest-desktop-companion P01-02 | 11 | 2 tasks | 10 files |
 | Phase 01-honest-desktop-companion P01-03 | 10 | 2 tasks | 8 files |
+| Phase 01-honest-desktop-companion P04 | 6 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 - [Phase ?]: The launcher owns an ordered compile-time identifier set containing only the verified com.openai.codex; no aliases, deep links, or UI automation are guessed
 - [Phase ?]: The handoff races the native request against a five-second production timeout (injectable in tests), coalesces while .opening, and maps lookup/open/activation/timeout to explicit local results
 - [Phase ?]: WorkspaceOpening exposes only lookup/open/activate; SystemWorkspace is the AppKit implementation and the test fake is the only other conformer
+- [Phase ?]: The official usage handoff is the full data boundary: a single compile-time officialUsageURL opened in the default browser, with no fetch, embed, parse, cache, estimate, or retained page/account value
+- [Phase ?]: Routing stays payload-free and in-place: .usageUnavailable and .menu carry no associated data; Back returns to .companion without closing the notch
+- [Phase ?]: Each external surface owns its launcher instance, so the usage detail, Desktop card, and menu each render bounded Opening feedback and their exact retryable error on their own surface
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-08-18T06:07:20.886Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-08-18T06:20:15.324Z
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None

@@ -48,7 +48,7 @@ Requirements for the first public release. Each requirement maps to exactly one 
 
 ### Usage
 
-- [ ] **USAGE-01**: User can open the official Codex usage or limits surface from Codex Atoll without Codex Atoll reading account credentials.
+- [x] **USAGE-01**: User can open the official Codex usage or limits surface from Codex Atoll without Codex Atoll reading account credentials.
 - [ ] **USAGE-02**: User can see App Server rate-limit information only when a supported Atoll-owned connection returns authoritative data, with its source and freshness shown.
 
 ### Privacy and Local Security
@@ -128,7 +128,7 @@ Explicitly excluded to protect reliability, security, and project focus.
 | OWN-02 | Phase 4 | Pending |
 | OWN-03 | Phase 4 | Pending |
 | OWN-04 | Phase 4 | Pending |
-| USAGE-01 | Phase 1 | Pending |
+| USAGE-01 | Phase 1 | Complete |
 | USAGE-02 | Phase 4 | Pending |
 | PRIV-01 | Phase 1 | Pending |
 | PRIV-02 | Phase 2 | Pending |
