@@ -29,8 +29,8 @@ Requirements for the first public release. Each requirement maps to exactly one 
 - [ ] **NAV-01**: User can focus the terminal and tmux pane associated with a live CLI session when Codex Atoll has sufficient identity information.
 - [ ] **NAV-02**: User receives a clear fallback when exact CLI focus is unavailable, without Codex Atoll sending synthetic terminal input.
 - [x] **DESK-01**: User can see a source-labelled Codex Desktop entry that never claims unverified task status, history, or approval capability.
-- [ ] **DESK-02**: User can activate ChatGPT Desktop from the notch to continue or review Desktop work.
-- [ ] **DESK-03**: User can see why a Desktop capability is unavailable and that the action must be completed in ChatGPT until an official integration exists.
+- [x] **DESK-02**: User can activate ChatGPT Desktop from the notch to continue or review Desktop work.
+- [x] **DESK-03**: User can see why a Desktop capability is unavailable and that the action must be completed in ChatGPT until an official integration exists.
 
 ### Safe Approvals
 
@@ -118,8 +118,8 @@ Explicitly excluded to protect reliability, security, and project focus.
 | NAV-01 | Phase 3 | Pending |
 | NAV-02 | Phase 3 | Pending |
 | DESK-01 | Phase 1 | Complete |
-| DESK-02 | Phase 1 | Pending |
-| DESK-03 | Phase 1 | Pending |
+| DESK-02 | Phase 1 | Complete |
+| DESK-03 | Phase 1 | Complete |
 | APPR-01 | Phase 3 | Pending |
 | APPR-02 | Phase 3 | Pending |
 | APPR-03 | Phase 3 | Pending |
