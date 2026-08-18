@@ -1,0 +1,35 @@
+Codex Atoll
+Copyright 2026 Codex Atoll contributors
+
+This product is a modified version of Claude Atoll, an open-source
+macOS notch companion for monitoring Claude Code sessions.
+
+Claude Atoll
+Copyright 2025 Farouq Aldori
+Upstream: https://github.com/engels74/claude-atoll
+License: Apache License, Version 2.0
+Source snapshot: 4e7cf858faa3e013b73150a5e4d41355c4f5be4e
+
+Codex Atoll modifications include:
+- Renaming the application, module, executable, bundle, asset, and logging
+  identity from Claude Atoll to Codex Atoll.
+- Replacing the Claude product icon and artwork with a bundled Codex mark.
+- Removing inherited hook installer, hook socket server, token tracking,
+  OAuth/Keychain, accessibility automation, updater, and session-monitoring
+  code and configuration.
+- Adding a Codex Atoll SwiftUI/AppKit application entry, localization
+  catalog, and asset catalog.
+
+See the project repository history for the complete change set.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
