@@ -167,14 +167,24 @@ Update the existing `mp-*` record by ID. Re-import is the wrong tool here:
 this workspace carries that name any more, so it creates a second skill and
 leaves the bound one untouched.
 
-1. `multica skill refresh <existing mp-* id>`
-2. Rewrite the skill so frontmatter reads `name: mp-<name>` and carries no
-   `disable-model-invocation` line, then run
-   `multica skill update <id> --name mp-<name> --content-file <file>`
-3. Read the skill back with `multica skill get <id> --with-content` and confirm
-   the stored name and content are the ones you wrote. Then run
+1. `multica skill refresh <existing mp-* id>`. Stop the whole procedure if it
+   returns an error.
+2. Take the refreshed body from that command's response, or from
+   `multica skill get <id> --with-content` immediately after it. That fetched
+   body is the only source for the file you write next. Editing a copy of the
+   `SKILL.md` you already had on disk hands the refresh back to the old version
+   in step 3, and nothing downstream will report it.
+3. Change only the frontmatter of that refreshed body: `name: mp-<name>` and no
+   `disable-model-invocation` line. Leave every other byte identical, then run
+   `multica skill update <id> --name mp-<name> --content-file <file>`.
+4. Read back with `multica skill get <id> --with-content`. The stored body must
+   match the refreshed body except for those frontmatter fields. Then run
    `multica agent skills list <agent-id>` and confirm the same ID is still
    bound.
+
+Step 4 proves the stored record matches the file you wrote and that the binding
+survived. It cannot prove that file carried the upstream update — that
+guarantee comes from step 2 alone.
 
 **Verifying:** confirm the workspace copy actually loaded. The check differs by
 runtime.
