@@ -145,3 +145,28 @@ Do not make direct repo edits outside a GSD workflow unless the user explicitly 
 > Profile not yet configured. Run `/gsd-profile-user` to generate your developer profile.
 > This section is managed by `generate-claude-profile` -- do not edit manually.
 <!-- GSD:profile-end -->
+
+## Workspace Skills (mp-*)
+
+This repo's agents use 12 workspace skills imported from
+[mattpocock/skills](https://github.com/mattpocock/skills), renamed with an `mp-`
+prefix. The rename exists because the same skills are also installed under
+`~/.agents/skills/`, and an identically named local skill shadows the workspace
+copy without any error.
+
+**Updating:** `multica skill refresh <id>` re-downloads the upstream copy, which
+restores both the original unprefixed name and `disable-model-invocation: true`.
+It reports success. The agent then silently loads the local September copy
+instead of the workspace one.
+
+Update by re-importing and renaming instead:
+
+1. `multica skill import --url https://github.com/mattpocock/skills/tree/main/skills/<group>/<name> --on-conflict overwrite`
+2. Rewrite the returned skill's content so frontmatter reads `name: mp-<name>` and carries no `disable-model-invocation` line, then
+   `multica skill update <id> --name mp-<name> --content-file <file>`
+3. `multica agent skills list <agent-id>` and confirm the binding still lists `mp-<name>`
+
+**Verifying:** after any skill change, call the skill and check the `Base directory`
+it reports. A path under this task's workdir (`.claude/skills/mp-*` on Claude,
+`codex-home/skills/mp-*` on Codex) means the workspace copy loaded. A path under
+`~/.claude/skills/` or `~/.agents/skills/` means the local copy won.
