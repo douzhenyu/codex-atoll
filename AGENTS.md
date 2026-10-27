@@ -154,19 +154,38 @@ prefix. The rename exists because the same skills are also installed under
 `~/.agents/skills/`, and an identically named local skill shadows the workspace
 copy without any error.
 
-**Updating:** `multica skill refresh <id>` re-downloads the upstream copy, which
-restores both the original unprefixed name and `disable-model-invocation: true`.
-It reports success. The agent then silently loads the local September copy
-instead of the workspace one.
+**Updating:** `multica skill refresh <id>` re-downloads the upstream copy and
+replaces the skill's name, description, content, and supporting files with
+whatever upstream now has — including any invocation restriction the upstream
+frontmatter carries. It preserves the skill ID and its agent bindings, and it
+reports success either way. After a refresh the skill is back under its upstream
+name, so the local copy shadows it again until you restore the prefix. Refresh
+requires the skill's creator or a workspace owner/admin.
 
-Update by re-importing and renaming instead:
+Update the existing `mp-*` record by ID. Re-import is the wrong tool here:
+`import --on-conflict overwrite` matches on the upstream name, and no record in
+this workspace carries that name any more, so it creates a second skill and
+leaves the bound one untouched.
 
-1. `multica skill import --url https://github.com/mattpocock/skills/tree/main/skills/<group>/<name> --on-conflict overwrite`
-2. Rewrite the returned skill's content so frontmatter reads `name: mp-<name>` and carries no `disable-model-invocation` line, then
+1. `multica skill refresh <existing mp-* id>`
+2. Rewrite the skill so frontmatter reads `name: mp-<name>` and carries no
+   `disable-model-invocation` line, then run
    `multica skill update <id> --name mp-<name> --content-file <file>`
-3. `multica agent skills list <agent-id>` and confirm the binding still lists `mp-<name>`
+3. Read the skill back with `multica skill get <id> --with-content` and confirm
+   the stored name and content are the ones you wrote. Then run
+   `multica agent skills list <agent-id>` and confirm the same ID is still
+   bound.
 
-**Verifying:** after any skill change, call the skill and check the `Base directory`
-it reports. A path under this task's workdir (`.claude/skills/mp-*` on Claude,
-`codex-home/skills/mp-*` on Codex) means the workspace copy loaded. A path under
-`~/.claude/skills/` or `~/.agents/skills/` means the local copy won.
+**Verifying:** confirm the workspace copy actually loaded. The check differs by
+runtime.
+
+- **Claude runtime:** call the skill and read the `Base directory` it reports. A
+  path under `<task>/workdir/.claude/skills/mp-*` means the workspace copy
+  loaded. A path under `~/.claude/skills/` or `~/.agents/skills/` means the local
+  copy won.
+- **Codex runtime:** a skill call returns no `Base directory`; Codex reads the
+  path listed in its skill list. Confirm that listed path is under
+  `<task>/codex-home/skills/mp-*`. Note that `codex-home` sits beside `workdir`,
+  not inside it. When the path alone is not decisive, compare the `SKILL.md`
+  content hash against the workspace copy returned by
+  `multica skill get <id> --with-content`.
